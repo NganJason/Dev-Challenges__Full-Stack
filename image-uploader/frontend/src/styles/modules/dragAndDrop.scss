@@ -1,0 +1,21 @@
+.drag-and-drop {
+    width: 338px;
+    height: 218.9px;
+    left: 551.82px;
+    top: 427.97px;
+
+    position: relative;
+
+    background: #F6F8FB;
+    border: 1px dashed #97BEF4;
+    box-sizing: border-box;
+    border-radius: 12px;
+
+    * {
+        pointer-events: none !important;
+    }
+}
+
+.drag-and-drop__bg {
+    position: absolute;
+}

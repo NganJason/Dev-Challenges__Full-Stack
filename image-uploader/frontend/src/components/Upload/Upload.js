@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useRef } from "react";
 import Text from "../Text/Text"
-import DragIcon from "../../images/dragIcon.svg"
 import Button from "../Button/Button";
+import DragAndDrop from "../DragAndDrop/DragAndDrop";
 
-function Upload() {
+function Upload({ onFileSubmit }) {
+  const inputRef = useRef(null);
+
+  const onImageClick = () => {
+    inputRef.current.click();
+  };
+
   return (
     <div className="upload bg-secondary">
       <Text size="1.3rem" align="center">
@@ -15,18 +21,34 @@ function Upload() {
       </Text>
 
       <div className="drag-box bg-tertiary">
-        <img src={DragIcon} />
-        <Text size="0.8rem" align="center" color="tertiary">
-          Drag & Drop your image here
-        </Text>
+        <DragAndDrop onFileSubmit={onFileSubmit} />
       </div>
 
       <Text size="0.8rem" align="center" mgTop="1.5" color="tertiary">
         Or
       </Text>
 
-      <Button width="40%" height="2.5rem" border="8px" mgTop="1">
-        Choose a file
+      <Button
+        width="40%"
+        height="2.5rem"
+        border="8px"
+        mgTop="1"
+        onClick={onImageClick}
+      >
+        <Text size="0.8rem" color="light">
+          Choose a file
+        </Text>
+        <input
+          ref={inputRef}
+          className="img__upload-btn"
+          type="file"
+          id="photo"
+          name="photo"
+          accept="image/png, image/jpeg"
+          onChange={(e) => {
+            onFileSubmit(e.target.files[0]);
+          }}
+        />
       </Button>
     </div>
   );
