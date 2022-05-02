@@ -1,0 +1,35 @@
+@mixin ease-transition {
+    transition: background-color ease-in-out 0.3s;
+    -webkit-transition: background-color ease-in-out 0.3s;
+    -o-transition: background-color ease-in-out 0.3s;
+    -moz-transition: background-color ease-in-out 0.3s;
+}
+
+* {
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+
+    @include ease-transition();
+}
+
+:root, body, #root {
+    height: 100%;
+    font-size: 16px;
+}
+
+input {
+    outline: none;
+}
+
+.material-icons.md-18 { font-size: 1.2rem; width: 1.2rem; }
+.material-icons.md-24 { font-size: 1.5rem; width: 1.5rem; }
+.material-icons.md-36 { font-size: 2rem; width: 2rem; }
+.material-icons.md-48 { font-size: 3rem; width: 3rem; }
+.material-icons.inline { display: inline; }
+
+@media only screen and (max-width: 1200px) {
+  :root, body, #root {
+        font-size: 16px;
+    }
+}

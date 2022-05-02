@@ -1,0 +1,39 @@
+.loading-bar {
+    width: 80%;
+}
+
+.bar {
+    height: 8px;
+    padding: 3px;
+
+    position: relative;
+
+    background-color: #E7E7EB;
+    border-radius: 13px;
+}
+
+.loading {
+    position: absolute;
+    top: 0;
+
+    background-color: hsl(214, 84%, 56%);
+    border-radius: 10px;
+
+    animation-name: load;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes load {
+  0% {
+    left: 0%;
+  }
+
+  50% {
+    left: 70%;
+  }
+
+  100% {
+      left: 0%;
+  }
+}

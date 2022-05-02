@@ -1,0 +1,37 @@
+.App {
+    background-color: #FFFFFF;
+    .bg-secondary { background-color: #FFFFFF; }
+    .bg-tertiary { background-color: #F6F8FB; }
+
+    .btn {
+        &.primary {
+            background-color: #2F80ED;
+            color: #FFFFFF;
+        }
+    }
+
+    .text {
+        &.primary {
+            color: #4F4F4F;
+        }
+        &.secondary { 
+            color: #828282;
+        }
+        &.tertiary { 
+            color: #BDBDBD;
+        }
+        &.light {
+            color: #FFFFFF;
+        }
+    }
+
+    .material-icons {
+        &.primary {
+            color: #219653;
+        }
+    }
+}
+
+.App.dark {
+    .bg-secondary { background-color: #FFFFFF; }
+}
