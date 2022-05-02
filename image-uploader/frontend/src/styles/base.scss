@@ -28,6 +28,11 @@ input {
 .material-icons.md-48 { font-size: 3rem; width: 3rem; }
 .material-icons.inline { display: inline; }
 
+input[type=file], /* FF, IE7+, chrome (except button) */
+input[type=file]::-webkit-file-upload-button { /* chromes and blink button */
+    cursor: pointer; 
+}
+
 @media only screen and (max-width: 1200px) {
   :root, body, #root {
         font-size: 16px;
