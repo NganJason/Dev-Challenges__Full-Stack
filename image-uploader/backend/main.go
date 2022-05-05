@@ -13,6 +13,7 @@ func main() {
 
 	mux.HandleFunc("/api/img/upload", handler.UploadHandler)
 	mux.HandleFunc("/api/img/get", handler.GetImgHandler)
+	mux.HandleFunc("/api/healthcheck", handler.HealthCheckHandler)
 
 	handler := cors.Default().Handler(mux)
 
