@@ -1,11 +1,18 @@
 import React from "react";
-import DragIcon from "../../images/dragIcon.svg";
 import Button from "../Button/Button";
 import Text from "../Text/Text";
 
-function Uploaded() {
+function Uploaded({url}) {
   const copyToClipboard = () => {
-    navigator.clipboard.writeText("Hello world")
+    navigator.clipboard.writeText(url)
+  }
+
+  const shortenUrlLink = () => {
+    if (url.length > 30) {
+      return `${url.slice(0,30)}....`
+    }
+
+    return url
   }
   return (
     <div className="uploaded bg-secondary">
@@ -15,17 +22,20 @@ function Uploaded() {
         Uploaded Successfully
       </Text>
 
-      <img
-        className="uploaded__img"
-        src={
-          "https://images.pexels.com/photos/2662116/pexels-photo-2662116.jpeg?cs=srgb&dl=pexels-jaime-reimer-2662116.jpg&fm=jpg"
-        }
-      />
+      <img className="uploaded__img" src={url} />
 
       <div className="uploaded__link bg-tertiary">
-        <Text size="0.7rem">http://google.com</Text>
+        <Text size="0.7rem">
+          {shortenUrlLink()}
+        </Text>
 
-        <Button border="8px" width="25%" height="90%" align="right" onClick={copyToClipboard}>
+        <Button
+          border="8px"
+          width="25%"
+          height="90%"
+          align="right"
+          onClick={copyToClipboard}
+        >
           <Text size="0.7rem" color="light">
             Copy Link
           </Text>

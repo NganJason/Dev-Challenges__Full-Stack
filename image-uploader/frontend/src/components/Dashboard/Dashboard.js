@@ -1,26 +1,29 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import Upload from "../Upload/Upload";
 import Uploading from "../Uploading/Uploading";
 import Uploaded from "../Uploaded/Uploaded";
+import ImgService from "../../model/imgService";
+
+const imgService = new ImgService()
 
 function Dashboard() {
   const [file, setFile] = useState(null)
-  const [submitted, setSubmitted] = useState(false)
+  const [fileUrl, setFileUrl] = useState("")
 
-  const onFileSubmit = (file) => {
+  const onFileSubmit = async (file) => {
     setFile(file);
 
-    setInterval(() => {
-      setFile(null)
-      setSubmitted(true)
-    }, 500)
+    let res = await imgService.uploadImg(file)
+    setFile(null)
+    console.log(res.data.url)
+    setFileUrl(res.data.url);
   };
 
   const getComponent= () => {
-    if (file === null && !submitted) {
+    if (file === null && fileUrl === "") {
       return <Upload onFileSubmit={onFileSubmit} />;
-    } else if (submitted) {
-      return <Uploaded/>
+    } else if (fileUrl !== "") {
+      return <Uploaded url={fileUrl}/>
     }
 
     return <Uploading/>
