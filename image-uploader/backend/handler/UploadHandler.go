@@ -57,6 +57,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Printf("uploaded img successfully, %s\n", fileAddr)
 	w.Header().Set("Content-Type", "application/json")
     w.Write(jsonResp)
 }
