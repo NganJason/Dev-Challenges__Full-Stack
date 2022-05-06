@@ -1,0 +1,41 @@
+.signup {
+    width: 450px; 
+    height: 60%;
+    min-height: 600px;
+    margin: auto;
+    padding: 2rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    border: 1px solid #BDBDBD;
+    border-radius: 24px;
+
+    &__logo {
+        width: 30%;
+        height: 1.1rem;
+    }
+
+    input {
+        height: 3rem;
+        width: 100%;
+        margin-top: 1rem;
+        padding: 1rem;
+        
+        border: 1px solid #BDBDBD;
+        border-radius: 8px;
+    }
+}
+
+.social-icons {
+    margin-top: 0.5rem;
+
+    display: flex;
+    justify-content: center;
+
+    img {
+        margin: 0 0.5rem;
+        width: 2.7rem;
+    }
+}

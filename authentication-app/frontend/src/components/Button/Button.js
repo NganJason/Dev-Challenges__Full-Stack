@@ -31,7 +31,7 @@ function Button({
   const classNames = `
         btn 
         ${color ? color : "primary"}
-        ${align ? align : "center"}
+        ${align ? align : ""}
         ${txtAlign ? `txt_${txtAlign}` : "txt_center"}
         ${size ? `btn_${size}` : "btn_md"}
         ${round ? "btn_round" : ""}
