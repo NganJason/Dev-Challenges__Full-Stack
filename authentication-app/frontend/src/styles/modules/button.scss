@@ -1,0 +1,65 @@
+.btn {
+    height: 3rem;
+    width: 5.3rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.3rem;
+
+    position: relative;
+
+    text-align: center;
+    cursor: pointer;
+
+    &.left {
+        margin-right: auto;
+    }
+
+    &.center {
+        margin: auto;
+    }
+
+    &.right {
+        margin-left: auto;
+    }
+
+    &.txt_left {
+        justify-content: left;
+    }
+
+    &.txt_center {
+        justify-content: center;
+    }
+
+    &.txt_right {
+        justify-content: right;
+    }
+
+    &.btn_sm {
+        height: 2.3rem;
+        width: 2.3rem;
+    }
+
+    &.btn_md {
+        height: 2rem;
+        width: 6.5rem;
+    }
+
+    &.btn_lg {
+        height: 2.5rem;
+        width: 10rem;
+    }
+
+    &_inline {
+        display: inline;
+    }
+
+    &.btn_round {
+        border-radius: 100%;
+    }
+
+    &:hover {
+        transform: scale(1.02);
+    }
+}
