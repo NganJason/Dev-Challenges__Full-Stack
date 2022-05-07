@@ -12,10 +12,12 @@ function Text({
   inline,
   hover,
   cursor,
+  width,
   children,
   ...props
 }) {
   const styles = {
+    width: `${width ? width : ""}`,
     textAlign: `${align ? align : "left"}`,
     fontSize: `${size ? `${size}` : "1rem"}`,
     fontWeight: `${bd ? `${bd}` : "500"}`,

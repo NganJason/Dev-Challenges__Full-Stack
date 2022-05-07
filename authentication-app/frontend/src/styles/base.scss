@@ -14,7 +14,8 @@
 }
 
 :root, body, #root {
-    height: 100%;
+    height: auto;
+    min-height: 100vh;
     font-size: 16px;
 }
 
