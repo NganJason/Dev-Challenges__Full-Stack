@@ -1,7 +1,6 @@
 .signup {
     width: 450px; 
-    height: 60%;
-    min-height: 600px;
+    height: auto;
     margin: auto;
     padding: 2rem;
 
@@ -35,7 +34,19 @@
     justify-content: center;
 
     img {
-        margin: 0 0.5rem;
         width: 2.7rem;
+        margin: 0.6rem 0.5rem;
+        
+        cursor: pointer;
     }
+
+    img:hover {
+        transform: scale(1.05);
+    }
+}
+
+@media only screen and (max-width: 500px) {
+  .signup {
+    width: 90%;
+  }
 }

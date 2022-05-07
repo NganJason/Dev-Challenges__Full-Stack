@@ -6,6 +6,10 @@
             background-color: #2F80ED;
             color: #FFFFFF;
         }
+
+        &.inherit {
+            background-color: inherit;
+        }
     }
 
     .text {
@@ -19,7 +23,8 @@
     }
 
     .material-icons {
-        &.primary {
+        &.theme-toggler {
+            color: #333333;
         }
     }
 }
@@ -31,6 +36,10 @@
         &.primary {
             background-color: #2F80ED;
             color: #FFFFFF;
+        }
+
+        &.inherit {
+            background-color: inherit;
         }
     }
 
@@ -45,7 +54,8 @@
     }
 
     .material-icons {
-        &.primary {
+        &.theme-toggler {
+            color: #FFC107;
         }
     }
 }
