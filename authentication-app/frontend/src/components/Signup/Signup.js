@@ -25,14 +25,10 @@ function Signup({isSignup, isDarkTheme}) {
     console.log(username, password)
   }
 
-  return (
-    <div className="signup">
-      <img
-        className="signup__logo"
-        src={isDarkTheme ? darkThemeDevLogo : lightThemeDevLogo}
-      />
-      {isSignup ? (
-        <>
+  const getFormTitle = () => {
+    if (isSignup) {
+      return (
+        <div>
           <Text size="1.1rem" bd="600" mgTop="1">
             Join thousands of learners from around the world
           </Text>
@@ -41,14 +37,45 @@ function Signup({isSignup, isDarkTheme}) {
             Master web development by making real-life projects. There are
             multiple paths for you to choose.
           </Text>
-        </>
-      ) : (
-        <>
+        </div>
+      );
+    } else {
+      return (
+        <div>
           <Text size="1.1rem" bd="600" mgTop="1">
             Login
           </Text>
-        </>
-      )}
+        </div>
+      );
+    }
+  }
+
+  const getFormLink = () => {
+    if (isSignup) {
+      return (
+        <div>
+          Already a member? <a href="http://localhost:3001/login">Login</a>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          Don't have an account yet?{" "}
+          <a href="http://localhost:3001/signup">Register</a>
+        </div>
+      ); 
+    }
+  }
+
+  return (
+    <div className="signup">
+      <img
+        className="signup__logo"
+        src={isDarkTheme ? darkThemeDevLogo : lightThemeDevLogo}
+        alt="form-logo"
+      />
+
+      {getFormTitle()}
 
       <input
         type="text"
@@ -74,28 +101,20 @@ function Signup({isSignup, isDarkTheme}) {
       >
         {isSignup ? "Start coding now" : "Login"}
       </Button>
+      
       <Text bd="400" size="0.9rem" color="secondary" align="center">
         or continue with these social profile
       </Text>
 
       <div className="social-icons">
-        <img src={googleLogo} />
-        <img src={facebookLogo} />
-        <img src={twitterLogo} />
-        <img src={githubLogo} />
+        <img src={googleLogo} alt="google-icon" />
+        <img src={facebookLogo} alt="facebook-icon" />
+        <img src={twitterLogo} alt="twitter-icon" />
+        <img src={githubLogo} alt="github-icon" />
       </div>
 
       <Text bd="400" size="0.9rem" align="center" color="secondary">
-        {isSignup ? (
-          <>
-            Already a member? <a href="http://localhost:3001/login">Login</a>
-          </>
-        ) : (
-          <>
-            Don't have an account yet?{" "}
-            <a href="http://localhost:3001/signup">Register</a>
-          </>
-        )}
+        {getFormLink()}
       </Text>
     </div>
   );
