@@ -7,6 +7,11 @@
             color: #FFFFFF;
         }
 
+        &.secondary {
+            background-color: #FFFFFF;
+            border: 1px solid #828282;
+        }
+
         &.inherit {
             background-color: inherit;
         }
@@ -24,6 +29,10 @@
 
     .material-icons {
         &.theme-toggler {
+            color: #333333;
+        }
+
+        &.primary {
             color: #333333;
         }
     }
@@ -56,6 +65,10 @@
     .material-icons {
         &.theme-toggler {
             color: #FFC107;
+        }
+
+        &.primary {
+            color: #FFFFFF;
         }
     }
 }

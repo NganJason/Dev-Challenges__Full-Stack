@@ -1,0 +1,50 @@
+.info {
+    display: flex;
+    flex-direction: column;
+}
+
+.info__board {
+    width: 845px;
+    height: 580px;
+    margin: auto;
+    margin-top: 1.5rem;
+
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid #E0E0E0;
+    border-radius: 12px;
+
+    > div {
+        padding: 1rem 2rem;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        
+    }
+
+    > div:not(:last-child) {
+        border-bottom: 1px solid #D3D3D3;
+    }
+
+    > div:not(:first-child) {
+        .text {
+            width: 30%;
+        }
+    }
+}
+
+.board__header {
+    .header__content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+.board__photo {
+    img {
+        width: 72px;
+        border-radius: 8px;
+    }
+}
