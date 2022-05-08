@@ -1,8 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import Text from "../Text/Text";
 import Button from "../Button/Button"
 
 function Info() {
+  let navigate = useNavigate(); 
+
+  const routeChange = () => {
+    let path = `edit-info`;
+    navigate(path);
+  };
+
   return (
     <div className="info">
       <section>
@@ -25,7 +34,7 @@ function Info() {
             </Text>
           </div>
 
-          <Button color="secondary" border="12px">
+          <Button color="secondary" border="12px" onClick={routeChange}>
             <Text bd="500" size="1rem" color="secondary">
               Edit
             </Text>
@@ -37,7 +46,9 @@ function Info() {
             Photo
           </Text>
 
-          <img src="https://64.media.tumblr.com/65390415cadbd069148850d7cdcbedd1/tumblr_ozgyzr929N1qjoleso1_1280.jpg" />
+          <div className="field__content">
+            <img src="https://64.media.tumblr.com/65390415cadbd069148850d7cdcbedd1/tumblr_ozgyzr929N1qjoleso1_1280.jpg" />
+          </div>
         </div>
 
         <div className="board__name">
@@ -45,7 +56,9 @@ function Info() {
             Name
           </Text>
 
-          <Text>Jason Ngan</Text>
+          <div className="field__content">
+            <Text>Jason Ngan</Text>
+          </div>
         </div>
 
         <div className="board__bio">
@@ -53,7 +66,9 @@ function Info() {
             Bio
           </Text>
 
-          <Text>I am a big fans of software developer</Text>
+          <div className="field__content">
+            <Text>I am a big fans of software developer</Text>
+          </div>
         </div>
 
         <div className="board__phone">
@@ -61,7 +76,9 @@ function Info() {
             Phone
           </Text>
 
-          <Text>1234567</Text>
+          <div className="field__content">
+            <Text>1234567</Text>
+          </div>
         </div>
 
         <div className="board__email">
@@ -69,7 +86,9 @@ function Info() {
             Email
           </Text>
 
-          <Text>nganjason007@gmail.com</Text>
+          <div className="field__content">
+            <Text>nganjason007@gmail.com</Text>
+          </div>
         </div>
 
         <div className="board__password">
@@ -77,7 +96,9 @@ function Info() {
             Password
           </Text>
 
-          <Text>***********</Text>
+          <div className="field__content">
+            <Text>***********</Text>
+          </div>
         </div>
       </div>
     </div>
