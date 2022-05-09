@@ -1,6 +1,11 @@
 .App {
     background-color: #FFFFFF;
 
+    .bg-primary { background-color: #FFFFFF; }
+    .bg-hover:hover {
+        background-color: #F2F2F2;
+    }
+
     .btn {
         &.primary {
             background-color: #2F80ED;
@@ -29,6 +34,10 @@
         &.tertiary {
             color: #4F4F4F;
         }
+
+        &.alert {
+            color: #EB5757;
+        }
     }
 
     .material-icons {
@@ -39,11 +48,23 @@
         &.primary {
             color: #333333;
         }
+
+        &.secondary {
+            color: #4F4F4F;
+        }
+
+        &.tertiary {
+            color: #EB5757;
+        }
     }
 }
 
 .App.dark {
     background-color: #333333;
+    .bg-primary { background-color: #2B2B2B; }
+    .bg-hover:hover {
+        background-color: #444444;
+    }
 
     .btn {
         &.primary {
@@ -64,6 +85,10 @@
         &.secondary {
             color: #828282;
         }
+
+        &.tertiary {
+            color: #E0E0E0;
+        }
     }
 
     .material-icons {
@@ -73,6 +98,10 @@
 
         &.primary {
             color: #FFFFFF;
+        }
+
+        &.secondary {
+            color: #E0E0E0;
         }
     }
 }

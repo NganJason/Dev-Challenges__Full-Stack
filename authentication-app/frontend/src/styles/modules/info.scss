@@ -56,3 +56,20 @@
         width: 100% !important;
     }
 }
+
+@media only screen and (max-width: 900px) {
+  .info__board {
+        width: 100%;
+
+        border: none;
+    }
+
+    .field__content {
+        text-align: right;
+        
+        * {
+            text-align: right !important;
+        }
+        
+    }
+}

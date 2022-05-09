@@ -46,3 +46,9 @@
         border-radius: 12px;
     }
 }
+
+@media only screen and (max-width: 900px) {
+  .edit-info {
+        width: 100%;
+    }
+}

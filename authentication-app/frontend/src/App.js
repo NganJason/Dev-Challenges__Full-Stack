@@ -1,5 +1,6 @@
-import React, { useState } from "react"
+import React, { useContext } from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ThemeContext } from "./hooks/themeContext";
 
 import Button from "./components/Button/Button";
 import Home from "./components/Home/Home";
@@ -10,44 +11,28 @@ import Info from "./components/Info/Info";
 import "./styles/main.scss"
 
 function App() {
-  const [isDarkTheme, setIsDarkTheme] = useState(false)
+  const { isDarkTheme, toggleIsDarkTheme } = useContext(ThemeContext);
 
-  const toggleTheme = () => {
-    setIsDarkTheme(!isDarkTheme)
-  }
   return (
-    <div className={`App bg-primary ${isDarkTheme ? "dark" : ""}`}>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="signup"
-            element={<Signup isSignup={true} isDarkTheme={isDarkTheme} />}
-          />
-          <Route
-            path="login"
-            element={<Signup isSignup={false} isDarkTheme={isDarkTheme} />}
-          />
-          
-          <Route path="/" exact element={<Home />}>
-            <Route exact path="" element={<Info />} />
-            <Route path="edit-info" element={<EditInfo />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <div className={`App bg-primary ${isDarkTheme ? "dark" : ""}`}>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="signup"
+              element={<Signup isSignup={true} />}
+            />
+            <Route
+              path="login"
+              element={<Signup isSignup={false} />}
+            />
 
-      <Button
-        onClick={toggleTheme}
-        width="2rem"
-        height="2rem"
-        align="right"
-        round
-        color="inherit"
-      >
-        <span class="material-icons theme-toggler">
-          {isDarkTheme ? "dark_mode" : "light_mode"}
-        </span>
-      </Button>
-    </div>
+            <Route path="/" exact element={<Home />}>
+              <Route exact path="" element={<Info />} />
+              <Route path="edit-info" element={<EditInfo />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </div>
   );
 }
 

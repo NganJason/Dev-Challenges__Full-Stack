@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { ThemeContext } from "../../hooks/themeContext";
+
 import Text from "../Text/Text"
 import Button from "../Button/Button"
 
@@ -9,9 +11,11 @@ import twitterLogo from "../../assets/Twitter.svg";
 import googleLogo from "../../assets/Google.svg";
 import facebookLogo from "../../assets/Facebook.svg";
 
-function Signup({isSignup, isDarkTheme}) {
+function Signup({isSignup}) {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+
+  const { isDarkTheme } = useContext(ThemeContext);
 
   const onUsernameChange = (e) => {
     setUsername(e.target.value)

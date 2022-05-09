@@ -1,0 +1,40 @@
+.dropdown-modal {
+    height: auto;
+    width: 11rem;
+    padding: 1rem;
+
+    display: none;
+    position: absolute;
+    right: 3.5rem;
+    top: 3rem;
+    opacity: 0;
+
+    border: 1px solid #E0E0E0;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+
+    transition: display 0.5
+    s ease-out, opacity 3s ease-out;
+
+    &.show {
+        display: block;
+        opacity: 100%;
+    }
+
+    > div {
+        height: 2.5rem;
+        width: 100%;
+        padding: 0.7rem 0.5rem;
+
+        display: flex;
+        align-items: center;
+
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    > div:last-child {
+        border-top: 1px solid #E0E0E0;
+        border-radius: 0;
+    }
+}
