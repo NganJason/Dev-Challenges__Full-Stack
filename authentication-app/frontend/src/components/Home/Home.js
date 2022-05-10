@@ -12,9 +12,15 @@ function Home() {
   };
 
     return (
-      <div className="home" onClick={toggleModal}>
-        <Nav showModal={showModal} toggleModal={toggleModal}/>
-        <Outlet />
+      <div className="home">
+        <Nav showModal={showModal} toggleModal={toggleModal} />
+        <div
+          onClick={() => {
+            setShowModal(false);
+          }}
+        >
+          <Outlet />
+        </div>
       </div>
     );
 }
