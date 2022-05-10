@@ -11,7 +11,7 @@ import Info from "./components/Info/Info";
 import "./styles/main.scss"
 
 function App() {
-  const { isDarkTheme, toggleIsDarkTheme } = useContext(ThemeContext);
+  const { isDarkTheme } = useContext(ThemeContext);
 
   return (
       <div className={`App bg-primary ${isDarkTheme ? "dark" : ""}`}>
