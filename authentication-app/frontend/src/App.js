@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeContext } from "./hooks/themeContext";
 
@@ -12,9 +12,10 @@ import { useUserData } from "./hooks/useUserData";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function App() {
+  const [isAuth, setIsAuth] = useState(true);
   const { isDarkTheme } = useContext(ThemeContext);
-
   const { userData, editUserData } = useUserData();
+  
   return (
     <div className={`App bg-primary ${isDarkTheme ? "dark" : ""}`}>
       <BrowserRouter>
@@ -22,7 +23,7 @@ function App() {
           <Route path="signup" element={<Signup isSignup={true} />} />
           <Route path="login" element={<Signup isSignup={false} />} />
 
-          <Route element={<ProtectedRoute isAuth={true}/>}>
+          <Route element={<ProtectedRoute isAuth={isAuth} />}>
             <Route path="/" exact element={<Home />}>
               <Route exact path="" element={<Info userData={userData} />} />
               <Route
