@@ -1,5 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { ThemeContext } from "../../hooks/themeContext";
+import { Link } from "react-router-dom";
 
 import Text from "../Text/Text";
 import Button from "../Button/Button";
@@ -13,10 +14,12 @@ function Nav({showModal, toggleModal}) {
 
   return (
     <div className="nav">
-      <img
-        className="nav__logo"
-        src={isDarkTheme ? darkThemeLogo : lightThemeLogo}
-      />
+      <Link to="/">
+        <img
+          className="nav__logo"
+          src={isDarkTheme ? darkThemeLogo : lightThemeLogo}
+        />
+      </Link>
 
       <div className="nav__profile">
         <img src="https://64.media.tumblr.com/65390415cadbd069148850d7cdcbedd1/tumblr_ozgyzr929N1qjoleso1_1280.jpg" />

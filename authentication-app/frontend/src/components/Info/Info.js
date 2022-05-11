@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Text from "../Text/Text";
 import Button from "../Button/Button"
 
-function Info() {
+function Info({userData}) {
   let navigate = useNavigate(); 
 
   const routeChange = () => {
@@ -47,7 +47,7 @@ function Info() {
           </Text>
 
           <div className="field__content">
-            <img src="https://64.media.tumblr.com/65390415cadbd069148850d7cdcbedd1/tumblr_ozgyzr929N1qjoleso1_1280.jpg" />
+            <img src= {userData["image"]}/>
           </div>
         </div>
 
@@ -57,7 +57,7 @@ function Info() {
           </Text>
 
           <div className="field__content">
-            <Text>Jason Ngan</Text>
+            <Text>{userData["name"]}</Text>
           </div>
         </div>
 
@@ -67,7 +67,7 @@ function Info() {
           </Text>
 
           <div className="field__content">
-            <Text>I am a big fans of software developer</Text>
+            <Text>{userData["bio"]}</Text>
           </div>
         </div>
 
@@ -77,7 +77,7 @@ function Info() {
           </Text>
 
           <div className="field__content">
-            <Text>1234567</Text>
+            <Text>{userData["phone"]}</Text>
           </div>
         </div>
 
@@ -87,7 +87,7 @@ function Info() {
           </Text>
 
           <div className="field__content">
-            <Text>nganjason007@gmail.com</Text>
+            <Text>{userData["email"]}</Text>
           </div>
         </div>
 
@@ -97,7 +97,7 @@ function Info() {
           </Text>
 
           <div className="field__content">
-            <Text>***********</Text>
+            <Text>{userData["password"]}</Text>
           </div>
         </div>
       </div>

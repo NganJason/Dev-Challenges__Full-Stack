@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "react-router-dom";
 
 import Text from "../Text/Text";
 
@@ -16,15 +17,17 @@ function DropdownModal({show}) {
           <span className="material-icons inline md-24 secondary">
             account_circle
           </span>
-          <Text size="0.8rem" color="tertiary" inline>
-            My Profile
-          </Text>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Text size="0.8rem" color="tertiary" inline>
+              My Profile
+            </Text>
+          </Link>
         </div>
 
         <div className="bg-hover">
           <span className="material-icons inline md-24 secondary">people</span>
           <Text size="0.8rem" color="tertiary">
-            My Profile
+            Group Chat
           </Text>
         </div>
 
