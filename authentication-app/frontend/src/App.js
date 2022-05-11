@@ -9,6 +9,7 @@ import Info from "./components/Info/Info";
 
 import "./styles/main.scss"
 import { useUserData } from "./hooks/useUserData";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function App() {
   const { isDarkTheme } = useContext(ThemeContext);
@@ -21,14 +22,16 @@ function App() {
           <Route path="signup" element={<Signup isSignup={true} />} />
           <Route path="login" element={<Signup isSignup={false} />} />
 
-          <Route path="/" exact element={<Home />}>
-            <Route exact path="" element={<Info userData={userData} />} />
-            <Route
-              path="edit-info"
-              element={
-                <EditInfo userData={userData} setUserData={editUserData} />
-              }
-            />
+          <Route element={<ProtectedRoute isAuth={true}/>}>
+            <Route path="/" exact element={<Home />}>
+              <Route exact path="" element={<Info userData={userData} />} />
+              <Route
+                path="edit-info"
+                element={
+                  <EditInfo userData={userData} setUserData={editUserData} />
+                }
+              />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
