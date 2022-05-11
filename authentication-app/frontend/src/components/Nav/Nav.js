@@ -14,7 +14,7 @@ function Nav({showModal, toggleModal}) {
 
   return (
     <div className="nav">
-      <Link to="/">
+      <Link to="/" style={{width: "auto"}}>
         <img
           className="nav__logo"
           src={isDarkTheme ? darkThemeLogo : lightThemeLogo}
