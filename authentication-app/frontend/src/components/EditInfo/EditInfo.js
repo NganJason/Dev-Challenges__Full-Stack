@@ -35,7 +35,6 @@ function EditInfo({userData, setUserData}) {
       <div className="edit__link">
         <span class="material-icons md-18 inline link">arrow_back_ios</span>
         <Link to="/">Back</Link>
-        
       </div>
 
       <div className="edit-dashboard">
@@ -49,7 +48,7 @@ function EditInfo({userData, setUserData}) {
         </section>
 
         <div className="edit__content">
-          <img src="https://64.media.tumblr.com/65390415cadbd069148850d7cdcbedd1/tumblr_ozgyzr929N1qjoleso1_1280.jpg" />
+          <img src={clonedData["image"]} />
 
           <Text size="0.8rem" bd="500" tertiary>
             Name
