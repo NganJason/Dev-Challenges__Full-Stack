@@ -25,6 +25,13 @@ function Signup({isSignup}) {
     setPassword(e.target.value)
   }
 
+  const onGithub = (e) => {
+    let CLIENT_ID = "85de73f0c04a2f06d9d5";
+    let REDIRECT_URI = "http://localhost:3001/";
+    let url = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}`;
+    window.location.href = url
+  }
+
   const onSubmit = () => {
     console.log(username, password)
   }
@@ -114,7 +121,7 @@ function Signup({isSignup}) {
         <img src={googleLogo} alt="google-icon" />
         <img src={facebookLogo} alt="facebook-icon" />
         <img src={twitterLogo} alt="twitter-icon" />
-        <img src={githubLogo} alt="github-icon" />
+        <img src={githubLogo} alt="github-icon" onClick={onGithub}/>
       </div>
 
       <Text bd="400" size="0.9rem" align="center" color="secondary">
