@@ -1,5 +1,6 @@
 import React from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import Signup from "../Signup/Signup";
 
 function ProtectedRoute({
     isAuth, 
@@ -7,7 +8,7 @@ function ProtectedRoute({
     children,
 }) {
   if (!isAuth) {
-      return <Navigate to={redirectPath} replace />;
+    return <Signup isSignup={false}/>
   }
 
   return children ? children : <Outlet />
