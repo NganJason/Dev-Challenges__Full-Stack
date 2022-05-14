@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { ThemeContext } from "../../hooks/themeContext";
+import GoogleLogin from "react-google-login";
 
 import Text from "../Text/Text"
 import Button from "../Button/Button"
@@ -10,6 +11,9 @@ import githubLogo from "../../assets/Github.svg"
 import twitterLogo from "../../assets/Twitter.svg";
 import googleLogo from "../../assets/Google.svg";
 import facebookLogo from "../../assets/Facebook.svg";
+
+const Google_Client_ID =
+  "347600384407-76au7p6cbmgkb26fr26bp56o98ooks2e.apps.googleusercontent.com";
 
 function Signup({isSignup}) {
   const [username, setUsername] = useState("")
@@ -30,6 +34,14 @@ function Signup({isSignup}) {
     let REDIRECT_URI = "http://localhost:3001/";
     let url = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}`;
     window.location.href = url
+  }
+
+  const onGoogleSuccess = (res) => {
+    console.log("success", res)
+  }
+
+  const onGoogleFail = (res) => {
+    console.log("fail", res)
   }
 
   const onSubmit = () => {
@@ -112,18 +124,31 @@ function Signup({isSignup}) {
       >
         {isSignup ? "Start coding now" : "Login"}
       </Button>
-      
+
       <Text bd="400" size="0.9rem" color="secondary" align="center">
         or continue with these social profile
       </Text>
 
       <div className="social-icons">
-        <img src={googleLogo} alt="google-icon" />
+        <GoogleLogin
+          clientId={Google_Client_ID}
+          onSuccess={onGoogleSuccess}
+          onFailure={onGoogleFail}
+          cookiePolicy={"single_host_origin"}
+          isSignedIn={true}
+          render={(renderProps) => (
+            <img
+              src={googleLogo}
+              alt="google-icon"
+              onClick={renderProps.onClick}
+            />
+          )}
+          buttonText="Login"
+        />
         <img src={facebookLogo} alt="facebook-icon" />
         <img src={twitterLogo} alt="twitter-icon" />
-        <img src={githubLogo} alt="github-icon" onClick={onGithub}/>
+        <img src={githubLogo} alt="github-icon" onClick={onGithub} />
       </div>
-
       <Text bd="400" size="0.9rem" align="center" color="secondary">
         {getFormLink()}
       </Text>
