@@ -4,7 +4,6 @@ import Signup from "../Signup/Signup";
 
 function ProtectedRoute({
     isAuth, 
-    redirectPath="/login",
     children,
 }) {
   if (!isAuth) {
