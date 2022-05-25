@@ -29,7 +29,7 @@ function Signup({isSignup}) {
     setPassword(e.target.value)
   }
 
-  const onGithub = (e) => {
+  const onGithub = () => {
     let CLIENT_ID = "85de73f0c04a2f06d9d5";
     let REDIRECT_URI = "http://localhost:3001/";
     let url = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}`;
