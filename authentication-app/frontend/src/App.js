@@ -21,9 +21,9 @@ function App() {
       window.location.href.match(/\?code=(.*)/) &&
       window.location.href.match(/\?code=(.*)/)[1];
 
-    if (code) {
-      setIsAuth(true)
-    }
+    // if (code) {
+    //   setIsAuth(true)
+    // }
   }, []);
 
   return (
