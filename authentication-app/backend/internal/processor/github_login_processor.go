@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/service"
-	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/vo"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/service"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/vo"
 )
 
 func GithubLoginProcessor(w http.ResponseWriter, r *http.Request) {
@@ -17,8 +17,6 @@ func GithubLoginProcessor(w http.ResponseWriter, r *http.Request) {
 		log.Println(err.Error())
 		return
 	}
-
-	log.Printf("Received access code=%s", req.AccessCode)
 
 	s := service.NewGithubService()
 	resp, err := s.Login(req.AccessCode, "")
