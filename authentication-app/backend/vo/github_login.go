@@ -1,7 +1,6 @@
 package vo
 
 const (
-	GithubClientSecret = "2d894c196dcba01892957b3759d9d7ddde4e5531"
 	GithubClientID     = "85de73f0c04a2f06d9d5"
 )
 
