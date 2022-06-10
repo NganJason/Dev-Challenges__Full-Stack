@@ -17,6 +17,7 @@ type Processor func(ctx context.Context, req, resp interface{}) error
 func WrapProcessor(
 	proc Processor,
 	req, resp interface{},
+	cookie *http.Cookie,
 ) HttpHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		newReq := reflect.New(reflect.TypeOf(req).Elem()).Interface()
@@ -31,6 +32,11 @@ func WrapProcessor(
 		ctx := ContextWithTraceID(r.Context(), time.Now().String())
 
 		err = proc(ctx, newReq, newResp)
+
+		if err == nil && cookie != nil {
+			http.SetCookie(w, cookie)
+		}
+
 		writeToClient(w, newResp, err)
 	}
 }
