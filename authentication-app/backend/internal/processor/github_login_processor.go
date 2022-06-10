@@ -1,28 +1,23 @@
 package processor
 
 import (
-	"encoding/json"
-	"log"
-	"net/http"
+	"context"
 
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/service"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/vo"
 )
 
-func GithubLoginProcessor(w http.ResponseWriter, r *http.Request) {
-	var req vo.GithubLoginRequest
-
-	err := json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		log.Println(err.Error())
-		return
-	}
+func GithubLoginProcessor(ctx context.Context, req, resp interface{}) error {
+	request := req.(*vo.GithubLoginRequest)
+	response := resp.(*vo.GithubLoginResponse)
 
 	s := service.NewGithubService()
-	resp, err := s.Login(req.AccessCode, "")
+
+	userID, err := s.Login(request.AccessCode, "")
 	if err != nil {
-		log.Println(err.Error())
+		return err
 	}
 
-	log.Println(resp)
+	response.UserID = &userID
+	return nil
 }

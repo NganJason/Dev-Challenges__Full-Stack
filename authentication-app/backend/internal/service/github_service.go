@@ -65,11 +65,11 @@ func (s *GithubService) getAccessToken(code string) (string, error) {
 		http_util.WithAccept("application/json"),
 	)
 	if err != nil {
-		return "", fmt.Errorf("error posting gitlab req err=%s", err.Error())
+		return "", fmt.Errorf("post gitlab req err=%s", err.Error())
 	}
 
 	if resp.Error != "" {
-		return "", fmt.Errorf("error getting access token err=%s", resp.Error)
+		return "", fmt.Errorf("get access token err=%s", resp.Error)
 	}
 
 	return resp.AccessToken, nil
@@ -89,7 +89,7 @@ func (s *GithubService) getUserID(accessToken string) (int64, error) {
 	}
 
 	if resp.Error != "" {
-		return 0, fmt.Errorf("failed to get user id err=%s", resp.Error)
+		return 0, fmt.Errorf("get userID err=%s", resp.Error)
 	}
 
 	return resp.ID, nil

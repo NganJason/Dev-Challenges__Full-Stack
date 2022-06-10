@@ -1,20 +1,27 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/processor"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/wrapper"
 	"github.com/rs/cors"
 )
 
 func main() {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/api/healthcheck", healthCheckHandler)
-
-	mux.HandleFunc("/api/login/github", processor.GithubLoginProcessor)
+	for _, proc := range processor.GetAllProcessors() {
+		mux.HandleFunc(
+			proc.Path,
+			wrapper.WrapProcessor(
+				proc.Processor,
+				proc.Req,
+				proc.Resp,
+			),
+		)
+	}
 
 	handler := cors.Default().Handler(mux)
 
@@ -23,8 +30,4 @@ func main() {
 	if err != nil {
 		log.Fatalf("error initiating server, %s", err.Error())
 	}
-}
-
-func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello I am healthy")
 }
