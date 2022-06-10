@@ -11,5 +11,6 @@ type GithubLoginRequest struct {
 }
 
 type GithubLoginResponse struct {
-	DebugMsg string
+	DebugMsg *string `json:"debug_msg"`
+	UserID   *int64  `json:"user_id"`
 }
