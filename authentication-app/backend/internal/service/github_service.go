@@ -1,9 +1,11 @@
 package service
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/vo"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/clog"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/http_util"
 )
 
@@ -29,20 +31,26 @@ type githubGetUserResponse struct {
 	Error string `json:"error"`
 }
 
-type GithubService struct{}
+type GithubService struct {
+	ctx context.Context
+}
 
-func NewGithubService() *GithubService {
-	return &GithubService{}
+func NewGithubService(ctx context.Context) *GithubService {
+	return &GithubService{
+		ctx: ctx,
+	}
 }
 
 func (s *GithubService) Login(code, redirectURI string) (int64, error) {
 	accessToken, err := s.getAccessToken(code)
 	if err != nil {
+		clog.Error(s.ctx, fmt.Sprintf("get access token err=%s", err.Error()))
 		return 0, err
 	}
 
 	userID, err := s.getUserID(accessToken)
 	if err != nil {
+		clog.Error(s.ctx, "get userID error")
 		return 0, err
 	}
 
@@ -58,6 +66,7 @@ func (s *GithubService) getAccessToken(code string) (string, error) {
 
 	var resp githubAccessTokenResponse
 
+	clog.Info(s.ctx, "posting access code to github")
 	err := http_util.Post(
 		accessTokenURL,
 		req,
@@ -78,6 +87,7 @@ func (s *GithubService) getAccessToken(code string) (string, error) {
 func (s *GithubService) getUserID(accessToken string) (int64, error) {
 	var resp githubGetUserResponse
 
+	clog.Info(s.ctx, "posting access token to github")
 	err := http_util.Get(
 		loginURL,
 		&resp,

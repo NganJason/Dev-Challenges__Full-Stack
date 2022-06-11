@@ -7,9 +7,6 @@ import (
 	"net/http"
 )
 
-type options struct {
-}
-
 func Post(url string, req, resp interface{}, options ...HttpOption) error {
 	client := http.Client{}
 
