@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"strconv"
 	"time"
 
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cerr"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/clog"
 )
 
 type HttpHandler func(w http.ResponseWriter, r *http.Request)
@@ -29,7 +31,10 @@ func WrapProcessor(
 			return
 		}
 
-		ctx := ContextWithTraceID(r.Context(), time.Now().String())
+		ctx := clog.ContextWithTraceID(
+			r.Context(),
+			strconv.Itoa(int(time.Now().Unix())),
+		)
 
 		err = proc(ctx, newReq, newResp)
 
@@ -88,14 +93,4 @@ func setDebugMessage(resp interface{}, msg string) {
 
 		requiredField.Set(reflect.ValueOf(&finalMsg))
 	}
-}
-
-type contextKey string
-
-const (
-	traceIDKey = contextKey("trace_id")
-)
-
-func ContextWithTraceID(ctx context.Context, traceID string) context.Context {
-	return context.WithValue(ctx, traceIDKey, traceID)
 }

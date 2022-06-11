@@ -1,15 +1,18 @@
 package main
 
 import (
-	"log"
+	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/processor"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/clog"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/wrapper"
 	"github.com/rs/cors"
 )
 
 func main() {
+	ctx := context.Background()
 	mux := http.NewServeMux()
 
 	for _, proc := range processor.GetAllProcessors() {
@@ -24,11 +27,12 @@ func main() {
 		)
 	}
 
+	clog.SetMinLogLevel(clog.LevelInfo)
 	handler := cors.Default().Handler(mux)
 
-	log.Println("Listening to port 8082")
+	clog.Info(ctx, "Listening to port 8082")
 	err := http.ListenAndServe(":8082", handler)
 	if err != nil {
-		log.Fatalf("error initiating server, %s", err.Error())
+		clog.Fatal(ctx, fmt.Sprintf("error init server, %s", err.Error()))
 	}
 }
