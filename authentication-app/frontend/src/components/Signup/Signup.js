@@ -4,10 +4,10 @@ import GoogleLogin from "react-google-login";
 
 import Text from "../Text/Text"
 import Button from "../Button/Button"
+import Github from "./Github";
 
 import lightThemeDevLogo from "../../assets/devchallenges.svg"
 import darkThemeDevLogo from "../../assets/devchallenges-light.svg";
-import githubLogo from "../../assets/Github.svg"
 import twitterLogo from "../../assets/Twitter.svg";
 import googleLogo from "../../assets/Google.svg";
 import facebookLogo from "../../assets/Facebook.svg";
@@ -15,7 +15,7 @@ import facebookLogo from "../../assets/Facebook.svg";
 const Google_Client_ID =
   "347600384407-76au7p6cbmgkb26fr26bp56o98ooks2e.apps.googleusercontent.com";
 
-function Signup({isSignup}) {
+function Signup({isSignup, setIsAuth}) {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
@@ -29,19 +29,12 @@ function Signup({isSignup}) {
     setPassword(e.target.value)
   }
 
-  const onGithub = () => {
-    let CLIENT_ID = "85de73f0c04a2f06d9d5";
-    let REDIRECT_URI = "http://localhost:3001/";
-    let url = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}`;
-    window.location.href = url
-  }
-
   const onGoogleSuccess = (res) => {
     console.log("success", res)
   }
 
   const onGoogleFail = (res) => {
-    console.log("fail", res)
+    // console.log("fail", res)
   }
 
   const onSubmit = () => {
@@ -147,7 +140,7 @@ function Signup({isSignup}) {
         />
         <img src={facebookLogo} alt="facebook-icon" />
         <img src={twitterLogo} alt="twitter-icon" />
-        <img src={githubLogo} alt="github-icon" onClick={onGithub} />
+        <Github setIsAuth={setIsAuth}/>
       </div>
       <Text bd="400" size="0.9rem" align="center" color="secondary">
         {getFormLink()}

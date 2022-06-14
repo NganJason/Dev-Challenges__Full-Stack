@@ -28,7 +28,15 @@ func main() {
 	}
 
 	clog.SetMinLogLevel(clog.LevelInfo)
-	handler := cors.Default().Handler(mux)
+	c := cors.New(
+		cors.Options{
+			AllowedOrigins:   []string{"http://localhost:3001"},
+			AllowCredentials: true,
+			AllowedMethods:   []string{"POST", "GET", "OPTIONS"},
+			Debug:            true,
+		},
+	)
+	handler := c.Handler(mux)
 
 	clog.Info(ctx, "Listening to port 8082")
 	err := http.ListenAndServe(":8082", handler)
