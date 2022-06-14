@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { initUserDataHandler } from "../handlers/userHandler";
 
 let userDataHandler = initUserDataHandler()

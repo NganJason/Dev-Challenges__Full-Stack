@@ -3,11 +3,12 @@ import { Outlet } from "react-router-dom";
 import Signup from "../Signup/Signup";
 
 function ProtectedRoute({
-    isAuth, 
+    isAuth,
+    setIsAuth,
     children,
 }) {
   if (!isAuth) {
-    return <Signup isSignup={false}/>
+    return <Signup isSignup={false} setIsAuth={setIsAuth}/>
   }
 
   return children ? children : <Outlet />

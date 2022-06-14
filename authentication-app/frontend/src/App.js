@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react"
+import React, { useContext, useState } from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeContext } from "./hooks/themeContext";
 
@@ -16,23 +16,18 @@ function App() {
   const { isDarkTheme } = useContext(ThemeContext);
   const { userData, editUserData } = useUserData();
   
-  useEffect(() => {
-    const code =
-      window.location.href.match(/\?code=(.*)/) &&
-      window.location.href.match(/\?code=(.*)/)[1];
-
-    // if (code) {
-    //   setIsAuth(true)
-    // }
-  }, []);
-
   return (
     <div className={`App bg-primary ${isDarkTheme ? "dark" : ""}`}>
       <BrowserRouter>
         <Routes>
-          <Route path="signup" element={<Signup isSignup={true} />} />
-          
-          <Route element={<ProtectedRoute isAuth={isAuth} />}>
+          <Route
+            path="signup"
+            element={<Signup isSignup={true} setIsAuth={setIsAuth} />}
+          />
+
+          <Route
+            element={<ProtectedRoute isAuth={isAuth} setIsAuth={setIsAuth} />}
+          >
             <Route path="/" exact element={<Home />}>
               <Route exact path="" element={<Info userData={userData} />} />
               <Route
