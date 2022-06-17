@@ -30,4 +30,18 @@ class Service {
             throw new Error(error.response.data.debug_msg);
           }); 
     }
+
+    VerifyAuth() {
+      let url = this.baseURL + "login/verify_auth"
+
+      return axios.get(
+        url, {
+          withCredentials: true
+        }
+      ).then(function (resp) {
+        return resp;
+      }).catch(function (error) {
+        throw new Error(error.response.data.debug_msg)
+      })
+    }
 }

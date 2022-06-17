@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/util"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/vo"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cookies"
 )
 
 type ProcessorConfig struct {
@@ -16,10 +16,6 @@ type ProcessorConfig struct {
 	Cookie    *http.Cookie
 }
 
-func boolPtr(b bool) *bool {
-	return &b
-}
-
 func GetAllProcessors() []ProcessorConfig {
 	return []ProcessorConfig{
 		{
@@ -27,7 +23,13 @@ func GetAllProcessors() []ProcessorConfig {
 			Processor: GithubLoginProcessor,
 			Req:       &vo.GithubLoginRequest{},
 			Resp:      &vo.GithubLoginResponse{},
-			Cookie:    util.GetDefaultCookies(),
+			Cookie:    cookies.GetDefaultCookies(),
+		},
+		{
+			Path:      "/api/login/verify_auth",
+			Processor: VerityAuthProcessor,
+			Req:       &vo.VerifyAuthRequest{},
+			Resp:      &vo.VerifyAuthResponse{},
 		},
 	}
 }

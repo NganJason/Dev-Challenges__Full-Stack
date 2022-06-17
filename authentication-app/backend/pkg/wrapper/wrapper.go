@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"reflect"
 	"strconv"
@@ -11,6 +12,7 @@ import (
 
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cerr"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/clog"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cookies"
 )
 
 type HttpHandler func(w http.ResponseWriter, r *http.Request)
@@ -27,14 +29,23 @@ func WrapProcessor(
 
 		err := json.NewDecoder(r.Body).Decode(&newReq)
 		if err != nil {
-			writeToClient(w, newResp, err)
-			return
+			if err == io.EOF {
+				newReq = nil
+			} else {
+				writeToClient(w, newResp, err)
+				return
+			}
 		}
 
 		ctx := clog.ContextWithTraceID(
 			r.Context(),
 			strconv.Itoa(int(time.Now().Unix())),
 		)
+
+		c, _ := r.Cookie(string(cookies.GetCookieKey()))
+		if c != nil {
+			ctx = cookies.AddCookieToCtx(ctx, c)
+		}
 
 		err = proc(ctx, newReq, newResp)
 
