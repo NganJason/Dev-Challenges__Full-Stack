@@ -27,14 +27,12 @@ function Github({setIsAuth}) {
         let s = NewService();
 
         s.GithubLogin(code)
-          .then(function (resp) {
+          .then(function() {
             setIsAuth(true);
           })
-          .catch(function (error) {
+          .catch(function(error) {
             console.log(error.message);
           });
-
-        
     }, [])
 
     return <img src={githubLogo} alt="github-icon" onClick={onGithub} />;

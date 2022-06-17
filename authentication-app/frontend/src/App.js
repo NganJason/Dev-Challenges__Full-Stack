@@ -1,6 +1,7 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useState, useEffect } from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeContext } from "./hooks/themeContext";
+import { NewService } from "../src/service/service";
 
 import Home from "./components/Home/Home";
 import Signup from "./components/Signup/Signup"
@@ -16,6 +17,18 @@ function App() {
   const { isDarkTheme } = useContext(ThemeContext);
   const { userData, editUserData } = useUserData();
   
+  useEffect(() => {
+    let s = NewService();
+
+    s.VerifyAuth()
+      .then(function(resp) {
+        setIsAuth(resp.data.is_auth)
+      })
+      .catch(function(error) {
+        console.log(error)
+      })
+  }, [])
+
   return (
     <div className={`App bg-primary ${isDarkTheme ? "dark" : ""}`}>
       <BrowserRouter>

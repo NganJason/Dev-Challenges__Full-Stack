@@ -14,3 +14,10 @@ type GithubLoginResponse struct {
 	DebugMsg *string `json:"debug_msg"`
 	UserID   *int64  `json:"user_id"`
 }
+
+type VerifyAuthRequest struct{}
+
+type VerifyAuthResponse struct {
+	DebugMsg *string `json:"debug_msg"`
+	IsAuth   *bool   `json:"is_auth"`
+}
