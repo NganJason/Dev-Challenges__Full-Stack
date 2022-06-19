@@ -33,6 +33,13 @@ func GetAllProcessors() []ProcessorConfig {
 			Cookie:    cookies.GetDefaultCookies(),
 		},
 		{
+			Path:      "/api/login/facebook",
+			Processor: FacebookLoginProcessor,
+			Req:       &vo.FacebookLoginRequest{},
+			Resp:      &vo.FacebookLoginResponse{},
+			Cookie:    cookies.GetDefaultCookies(),
+		},
+		{
 			Path:      "/api/login/verify_auth",
 			Processor: VerityAuthProcessor,
 			Req:       &vo.VerifyAuthRequest{},

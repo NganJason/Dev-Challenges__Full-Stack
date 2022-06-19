@@ -30,3 +30,11 @@ type GoogleLoginRequest struct {
 type GoogleLoginResponse struct {
 	DebugMsg *string `json:"debug_msg"`
 }
+
+type FacebookLoginRequest struct {
+	AccessCode *string `json:"access_code"`
+}
+
+type FacebookLoginResponse struct {
+	DebugMsg *string `json:"debug_msg"`
+}

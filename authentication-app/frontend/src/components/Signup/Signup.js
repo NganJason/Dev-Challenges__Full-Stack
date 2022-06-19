@@ -8,8 +8,9 @@ import Github from "./Github";
 import lightThemeDevLogo from "../../assets/devchallenges.svg"
 import darkThemeDevLogo from "../../assets/devchallenges-light.svg";
 import twitterLogo from "../../assets/Twitter.svg";
-import facebookLogo from "../../assets/Facebook.svg";
+
 import Google from "./Google";
+import Facebook from "./Facebook";
 
 
 function Signup({isSignup, setIsAuth}) {
@@ -113,7 +114,7 @@ function Signup({isSignup, setIsAuth}) {
 
       <div className="social-icons">
         <Google setIsAuth={setIsAuth} />
-        <img src={facebookLogo} alt="facebook-icon" />
+        <Facebook setIsAuth={setIsAuth} />
         <img src={twitterLogo} alt="twitter-icon" />
         <Github setIsAuth={setIsAuth} />
       </div>
