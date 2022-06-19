@@ -26,6 +26,13 @@ func GetAllProcessors() []ProcessorConfig {
 			Cookie:    cookies.GetDefaultCookies(),
 		},
 		{
+			Path:      "/api/login/google",
+			Processor: GoogleLoginProcessor,
+			Req:       &vo.GoogleLoginRequest{},
+			Resp:      &vo.GoogleLoginResponse{},
+			Cookie:    cookies.GetDefaultCookies(),
+		},
+		{
 			Path:      "/api/login/verify_auth",
 			Processor: VerityAuthProcessor,
 			Req:       &vo.VerifyAuthRequest{},

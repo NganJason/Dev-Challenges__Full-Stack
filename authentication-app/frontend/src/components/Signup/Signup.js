@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import { ThemeContext } from "../../hooks/themeContext";
-import GoogleLogin from "react-google-login";
 
 import Text from "../Text/Text"
 import Button from "../Button/Button"
@@ -9,11 +8,9 @@ import Github from "./Github";
 import lightThemeDevLogo from "../../assets/devchallenges.svg"
 import darkThemeDevLogo from "../../assets/devchallenges-light.svg";
 import twitterLogo from "../../assets/Twitter.svg";
-import googleLogo from "../../assets/Google.svg";
 import facebookLogo from "../../assets/Facebook.svg";
+import Google from "./Google";
 
-const Google_Client_ID =
-  "347600384407-76au7p6cbmgkb26fr26bp56o98ooks2e.apps.googleusercontent.com";
 
 function Signup({isSignup, setIsAuth}) {
   const [username, setUsername] = useState("")
@@ -27,14 +24,6 @@ function Signup({isSignup, setIsAuth}) {
 
   const onPasswordChange = (e) => {
     setPassword(e.target.value)
-  }
-
-  const onGoogleSuccess = (res) => {
-    console.log("success", res)
-  }
-
-  const onGoogleFail = (res) => {
-    // console.log("fail", res)
   }
 
   const onSubmit = () => {
@@ -123,24 +112,10 @@ function Signup({isSignup, setIsAuth}) {
       </Text>
 
       <div className="social-icons">
-        <GoogleLogin
-          clientId={Google_Client_ID}
-          onSuccess={onGoogleSuccess}
-          onFailure={onGoogleFail}
-          cookiePolicy={"single_host_origin"}
-          isSignedIn={true}
-          render={(renderProps) => (
-            <img
-              src={googleLogo}
-              alt="google-icon"
-              onClick={renderProps.onClick}
-            />
-          )}
-          buttonText="Login"
-        />
+        <Google setIsAuth={setIsAuth} />
         <img src={facebookLogo} alt="facebook-icon" />
         <img src={twitterLogo} alt="twitter-icon" />
-        <Github setIsAuth={setIsAuth}/>
+        <Github setIsAuth={setIsAuth} />
       </div>
       <Text bd="400" size="0.9rem" align="center" color="secondary">
         {getFormLink()}
