@@ -21,3 +21,12 @@ type VerifyAuthResponse struct {
 	DebugMsg *string `json:"debug_msg"`
 	IsAuth   *bool   `json:"is_auth"`
 }
+
+type GoogleLoginRequest struct {
+	Email *string `json:"email"`
+	SubID *string `json:"sub_id"`
+}
+
+type GoogleLoginResponse struct {
+	DebugMsg *string `json:"debug_msg"`
+}

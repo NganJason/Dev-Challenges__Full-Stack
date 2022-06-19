@@ -31,6 +31,25 @@ class Service {
           }); 
     }
 
+    GoogleLogin(email, subID) {
+      let url = this.baseURL + "login/google"
+
+      return axios.post(
+        url, 
+        {
+          email: email,
+          sub_id: subID
+        },
+        {withCredentials: true}
+      )
+      .then(function (resp) {
+        return resp;
+      })
+      .catch(function (error) {
+        throw new Error(error.response.data.debug_msg)
+      });
+    }
+
     VerifyAuth() {
       let url = this.baseURL + "login/verify_auth"
 
