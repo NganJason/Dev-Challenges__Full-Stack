@@ -10,24 +10,41 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/middleware"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cerr"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/clog"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cookies"
 )
 
-type HttpHandler func(w http.ResponseWriter, r *http.Request)
 type Processor func(ctx context.Context, req, resp interface{}) error
 
 func WrapProcessor(
 	proc Processor,
 	req, resp interface{},
-	cookie *http.Cookie,
-) HttpHandler {
+	needAuth bool,
+) http.HandlerFunc {
+	if needAuth {
+		return middleware.CheckAuthMiddleware(Wrapper(proc, req, resp))
+	}
+
+	return Wrapper(proc, req, resp)
+}
+
+func Wrapper(
+	proc Processor,
+	req, resp interface{},
+) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		newReq := reflect.New(reflect.TypeOf(req).Elem()).Interface()
 		newResp := reflect.New(reflect.TypeOf(resp).Elem()).Interface()
 
-		err := json.NewDecoder(r.Body).Decode(&newReq)
+		err := cerr.GetErrFromCtx(r.Context())
+		if err != nil {
+			writeToClient(w, newResp, err)
+			return
+		}
+
+		err = json.NewDecoder(r.Body).Decode(&newReq)
 		if err != nil {
 			if err == io.EOF {
 				newReq = nil
@@ -42,18 +59,17 @@ func WrapProcessor(
 			strconv.Itoa(int(time.Now().Unix())),
 		)
 
-		c, _ := r.Cookie(string(cookies.GetCookieKey()))
-		if c != nil {
-			ctx = cookies.AddCookieToCtx(ctx, c)
-		}
+		ctx = cookies.InitServerCookie(ctx)
 
 		err = proc(ctx, newReq, newResp)
-
-		if err == nil && cookie != nil {
-			http.SetCookie(w, cookie)
+		if err != nil {
+			writeToClient(w, newResp, err)
+			return
 		}
 
-		writeToClient(w, newResp, err)
+		setCookie(ctx, w)
+
+		writeToClient(w, newResp, nil)
 	}
 }
 
@@ -104,4 +120,13 @@ func setDebugMessage(resp interface{}, msg string) {
 
 		requiredField.Set(reflect.ValueOf(&finalMsg))
 	}
+}
+
+func setCookie(ctx context.Context, w http.ResponseWriter) {
+	c := cookies.GetServerCookieFromCtx(ctx)
+	if c == nil {
+		return
+	}
+
+	http.SetCookie(w, c)
 }

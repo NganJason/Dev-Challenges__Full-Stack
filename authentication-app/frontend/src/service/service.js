@@ -23,10 +23,10 @@ class Service {
             },
             { withCredentials: true }
           )
-          .then(function (resp) {
+          .then(function(resp) {
             return resp;
           })
-          .catch(function (error) {
+          .catch(function(error) {
             throw new Error(error.response.data.debug_msg);
           }); 
     }
@@ -42,14 +42,32 @@ class Service {
         },
         {withCredentials: true}
       )
-      .then(function (resp) {
+      .then(function(resp) {
         return resp;
       })
-      .catch(function (error) {
+      .catch(function(error) {
         throw new Error(error.response.data.debug_msg)
       });
     }
 
+    FacebookLogin(accessCode) {
+      let url = this.baseURL + "login/facebook"
+
+      return axios.post(
+        url,
+        {
+          access_code: accessCode,
+        },
+        {withCredentials: true}
+      )
+      .then(function(resp) {
+        return resp;
+      })
+      .catch(function(error) {
+        throw new Error(error.response.data.debug_msg)
+      })
+    }
+    
     VerifyAuth() {
       let url = this.baseURL + "login/verify_auth"
 

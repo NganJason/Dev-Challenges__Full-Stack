@@ -30,3 +30,31 @@ type GoogleLoginRequest struct {
 type GoogleLoginResponse struct {
 	DebugMsg *string `json:"debug_msg"`
 }
+
+type FacebookLoginRequest struct {
+	AccessCode *string `json:"access_code"`
+}
+
+type FacebookLoginResponse struct {
+	DebugMsg *string `json:"debug_msg"`
+}
+
+type SignupRequest struct {
+	Username *string `json:"username"`
+	Password *string `json:"password"`
+}
+
+type SignupResponse struct {
+	DebugMsg *string `json:"debug_msg"`
+}
+
+type LoginRequest struct {
+	Username *string `json:"username"`
+	Password *string `json:"password"`
+}
+
+type LoginResponse struct {
+	DebugMsg *string `json:"debug_msg"`
+	IsAuth   *bool   `json:"is_auth"`
+	JWT      *string `json:"jwt"`
+}
