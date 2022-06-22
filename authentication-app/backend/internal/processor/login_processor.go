@@ -9,6 +9,7 @@ import (
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/vo"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/auth"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cerr"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cookies"
 )
 
 func LoginProcessor(ctx context.Context, req, resp interface{}) error {
@@ -60,6 +61,9 @@ func (p *loginProcessor) process() error {
 			http.StatusBadGateway,
 		)
 	}
+
+	c := cookies.CreateCookie(jwt)
+	cookies.AddServerCookieToCtx(p.ctx, c)
 
 	p.resp.JWT = &jwt
 	p.resp.IsAuth = vo.BoolPtr(true)
