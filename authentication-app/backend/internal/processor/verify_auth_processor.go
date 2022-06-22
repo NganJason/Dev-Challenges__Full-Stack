@@ -11,8 +11,8 @@ import (
 func VerityAuthProcessor(ctx context.Context, req, resp interface{}) error {
 	response := resp.(*vo.VerifyAuthResponse)
 
-	cookie := cookies.GetCookieFromCtx(ctx)
-	if cookie == nil {
+	cookieVal := cookies.GetClientCookieValFromCtx(ctx)
+	if cookieVal == nil {
 		response.IsAuth = proto.Bool(false)
 	} else {
 		response.IsAuth = proto.Bool(true)

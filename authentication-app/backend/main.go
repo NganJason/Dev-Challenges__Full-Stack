@@ -22,7 +22,7 @@ func main() {
 				proc.Processor,
 				proc.Req,
 				proc.Resp,
-				proc.Cookie,
+				proc.NeedAuth,
 			),
 		)
 	}

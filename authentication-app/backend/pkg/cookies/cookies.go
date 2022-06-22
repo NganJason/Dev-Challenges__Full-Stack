@@ -7,18 +7,58 @@ import (
 
 type cookieOption func(*http.Cookie)
 
-type CookieKey string
+type cookieKey string
+
+var CKey cookieKey
 
 const (
-	authKey = CookieKey("authApp")
+	ClientCookieCtxKey = cookieKey("cookie_from_client")
+	ServerCookieCtxKey = cookieKey("cookie_from_server")
+
+	ClientCookieValCtxKey = cookieKey("cookie_val_from_client")
 )
 
-func AddCookieToCtx(ctx context.Context, cookie *http.Cookie) context.Context {
-	return context.WithValue(ctx, GetCookieKey(), cookie)
+func SetCookieKey(key string) {
+	CKey = cookieKey(key)
 }
 
-func GetCookieFromCtx(ctx context.Context) *http.Cookie {
-	c := ctx.Value(GetCookieKey())
+func GetCookieKey() string {
+	if CKey == "" {
+		return "default_cookie_key"
+	}
+
+	return string(CKey)
+}
+
+func AddClientCookieValToCtx(ctx context.Context, val *string) context.Context {
+	return context.WithValue(ctx, ClientCookieValCtxKey, val)
+}
+
+func GetClientCookieValFromCtx(ctx context.Context) *string {
+	c := ctx.Value(ClientCookieValCtxKey)
+	if c == nil {
+		return nil
+	}
+
+	return c.(*string)
+}
+
+func InitServerCookie(ctx context.Context) context.Context {
+	serverCookie := new(http.Cookie)
+	ctx = context.WithValue(ctx, ServerCookieCtxKey, serverCookie)
+
+	return ctx
+}
+
+func AddServerCookieToCtx(ctx context.Context, cookie *http.Cookie) {
+	c := ctx.Value(ServerCookieCtxKey)
+	existingCookie := c.(*http.Cookie)
+
+	*existingCookie = *cookie
+}
+
+func GetServerCookieFromCtx(ctx context.Context) *http.Cookie {
+	c := ctx.Value(ServerCookieCtxKey)
 	if c == nil {
 		return nil
 	}
@@ -26,14 +66,15 @@ func GetCookieFromCtx(ctx context.Context) *http.Cookie {
 	return c.(*http.Cookie)
 }
 
-func GetCookieKey() CookieKey {
-	return authKey
+func ExtractCookie(r *http.Request) *http.Cookie {
+	c, _ := r.Cookie(string(GetCookieKey()))
+	return c
 }
 
-func GetDefaultCookies(options ...cookieOption) *http.Cookie {
+func CreateCookie(value string, options ...cookieOption) *http.Cookie {
 	cookie := &http.Cookie{
 		Name:     string(GetCookieKey()),
-		Value:    "auth-app-value",
+		Value:    value,
 		Path:     "/",
 		MaxAge:   10 * 60,
 		HttpOnly: true,
@@ -47,15 +88,15 @@ func GetDefaultCookies(options ...cookieOption) *http.Cookie {
 	return cookie
 }
 
-func WithMaxAge(seconds int) cookieOption {
-	return func(c *http.Cookie) {
-		c.MaxAge = seconds
-	}
-}
-
 func WithName(name string) cookieOption {
 	return func(c *http.Cookie) {
 		c.Name = name
+	}
+}
+
+func WithMaxAge(seconds int) cookieOption {
+	return func(c *http.Cookie) {
+		c.MaxAge = seconds
 	}
 }
 
