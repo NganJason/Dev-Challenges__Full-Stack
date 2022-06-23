@@ -6,13 +6,13 @@ const (
 )
 
 type GithubLoginRequest struct {
-	AccessCode  string `json:"access_code"`
-	RedirectURI string `json:"redirect_uri"`
+	AccessCode  *string `json:"access_code"`
+	RedirectURI *string `json:"redirect_uri"`
 }
 
 type GithubLoginResponse struct {
 	DebugMsg *string `json:"debug_msg"`
-	UserID   *int64  `json:"user_id"`
+	UserID   *uint64 `json:"user_id"`
 }
 
 type VerifyAuthRequest struct{}
@@ -29,6 +29,7 @@ type GoogleLoginRequest struct {
 
 type GoogleLoginResponse struct {
 	DebugMsg *string `json:"debug_msg"`
+	UserID   *uint64 `json:"user_id"`
 }
 
 type FacebookLoginRequest struct {
@@ -37,6 +38,7 @@ type FacebookLoginRequest struct {
 
 type FacebookLoginResponse struct {
 	DebugMsg *string `json:"debug_msg"`
+	UserID   *uint64 `json:"user_id"`
 }
 
 type SignupRequest struct {
@@ -46,6 +48,7 @@ type SignupRequest struct {
 
 type SignupResponse struct {
 	DebugMsg *string `json:"debug_msg"`
+	UserID   *uint64 `json:"user_id"`
 }
 
 type LoginRequest struct {
@@ -55,6 +58,5 @@ type LoginRequest struct {
 
 type LoginResponse struct {
 	DebugMsg *string `json:"debug_msg"`
-	IsAuth   *bool   `json:"is_auth"`
-	JWT      *string `json:"jwt"`
+	UserID   *uint64 `json:"user_id"`
 }

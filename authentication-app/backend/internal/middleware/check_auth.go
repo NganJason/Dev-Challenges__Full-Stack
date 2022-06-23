@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/handler"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/model"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/util"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cerr"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cookies"
@@ -43,28 +44,26 @@ func CheckAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		userName := auth.Value
-		if userName == "" {
+		userID := auth.Value
+		authDM := model.NewUserAuthDM(r.Context())
+		h := handler.NewAuthHandler(r.Context(), authDM)
+
+		isAuth, err := h.ValidateUser(&userID)
+		if err != nil {
+			handleErr(next, w, r, err)
+			return
+		}
+
+		if !isAuth {
 			err = cerr.New(
-				"invalid token, userID is empty",
-				http.StatusBadRequest,
+				"user is not authenticated",
+				http.StatusUnauthorized,
 			)
 			handleErr(next, w, r, err)
 			return
 		}
 
-		h := handler.NewAuthHandler()
-		exist := h.CheckIfUserExist(userName)
-		if !exist {
-			err = cerr.New(
-				"user does not exist",
-				http.StatusBadRequest,
-			)
-			handleErr(next, w, r, err)
-			return
-		}
-
-		r = r.WithContext(cookies.AddClientCookieValToCtx(r.Context(), &userName))
+		r = r.WithContext(cookies.AddClientCookieValToCtx(r.Context(), &userID))
 
 		next(w, r)
 	}

@@ -2,46 +2,41 @@ package processor
 
 import (
 	"context"
-	"fmt"
 	"net/http"
+	"strconv"
 
-	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/service"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/handler"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/model"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/service/facebook"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/util"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/vo"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cerr"
-	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/clog"
-	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cookies"
 )
 
 func FacebookLoginProcessor(ctx context.Context, req, resp interface{}) error {
 	request := req.(*vo.FacebookLoginRequest)
-	// response := resp.(*vo.FacebookLoginResponse)
+	response := resp.(*vo.FacebookLoginResponse)
 
 	if request.AccessCode == nil {
 		return cerr.New("access_token cannot be empty", http.StatusBadRequest)
 	}
 
-	s := service.NewFacebookService(ctx)
-	userID, _, err := s.Login(*request.AccessCode)
+	userAuthDM := model.NewUserAuthDM(ctx)
+
+	h := handler.NewAuthHandler(ctx, userAuthDM)
+	h.SetFacebookService(facebook.NewFacebookService(ctx))
+
+	userID, err := h.LoginFacebook(request.AccessCode)
 	if err != nil {
-		clog.Error(ctx, err.Error())
 		return err
 	}
 
-	jwt, err := util.GenerateJWTToken(userID)
+	err = util.GenerateTokenAndAddCookies(ctx, strconv.Itoa(int(*userID)))
 	if err != nil {
-		err = cerr.New(
-			fmt.Sprintf("generate jwt token err=%s", err.Error()),
-			http.StatusBadGateway,
-		)
-
-		clog.Error(ctx, err.Error())
-
-		return err
+		return cerr.New(err.Error(), http.StatusBadGateway)
 	}
 
-	c := cookies.CreateCookie(jwt)
-	cookies.AddServerCookieToCtx(ctx, c)
+	response.UserID = userID
 
 	return nil
 }

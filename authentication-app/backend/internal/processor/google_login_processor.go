@@ -2,37 +2,37 @@ package processor
 
 import (
 	"context"
-	"fmt"
 	"net/http"
+	"strconv"
 
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/handler"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/model"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/util"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/vo"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cerr"
-	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/clog"
-	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cookies"
 )
 
 func GoogleLoginProcessor(ctx context.Context, req, resp interface{}) error {
 	request := req.(*vo.GoogleLoginRequest)
+	response := resp.(*vo.GoogleLoginResponse)
 
-	if request.Email == nil || request.SubID == nil {
+	if request.SubID == nil {
 		return cerr.New("email or sub_id cannot be empty", http.StatusBadRequest)
 	}
 
-	jwt, err := util.GenerateJWTToken(*request.SubID)
+	userAuthDM := model.NewUserAuthDM(ctx)
+	h := handler.NewAuthHandler(ctx, userAuthDM)
+
+	userID, err := h.LoginGoogle(request.SubID)
 	if err != nil {
-		err = cerr.New(
-			fmt.Sprintf("generate jwt token err=%s", err.Error()),
-			http.StatusBadGateway,
-		)
-
-		clog.Error(ctx, err.Error())
-
 		return err
 	}
 
-	c := cookies.CreateCookie(jwt)
-	cookies.AddServerCookieToCtx(ctx, c)
+	err = util.GenerateTokenAndAddCookies(ctx, strconv.Itoa(int(*userID)))
+	if err != nil {
+		return cerr.New(err.Error(), http.StatusBadGateway)
+	}
 
+	response.UserID = userID
 	return nil
 }

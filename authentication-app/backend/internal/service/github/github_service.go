@@ -1,4 +1,4 @@
-package service
+package github
 
 import (
 	"context"
@@ -13,6 +13,10 @@ const (
 	accessTokenURL = "https://github.com/login/oauth/access_token"
 	loginURL       = "https://api.github.com/user"
 )
+
+type Service interface {
+	Login(code string) (userID int64, err error)
+}
 
 type githubAccessTokenRequest struct {
 	ClientID     string `json:"client_id"`
@@ -35,20 +39,20 @@ type GithubService struct {
 	ctx context.Context
 }
 
-func NewGithubService(ctx context.Context) *GithubService {
+func NewGithubService(ctx context.Context) Service {
 	return &GithubService{
 		ctx: ctx,
 	}
 }
 
-func (s *GithubService) Login(code, redirectURI string) (int64, error) {
+func (s *GithubService) Login(code string) (userID int64, err error) {
 	accessToken, err := s.getAccessToken(code)
 	if err != nil {
 		clog.Error(s.ctx, fmt.Sprintf("get access token err=%s", err.Error()))
 		return 0, err
 	}
 
-	userID, err := s.getUserID(accessToken)
+	userID, err = s.getUserID(accessToken)
 	if err != nil {
 		clog.Error(s.ctx, "get userID error")
 		return 0, err

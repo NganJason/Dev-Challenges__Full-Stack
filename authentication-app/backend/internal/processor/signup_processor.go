@@ -2,12 +2,13 @@ package processor
 
 import (
 	"context"
-	"fmt"
 	"net/http"
+	"strconv"
 
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/handler"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/model"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/util"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/vo"
-	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/auth"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cerr"
 )
 
@@ -36,8 +37,20 @@ func (p *signupProcessor) process() error {
 		return err
 	}
 
-	hashedPassword, saltString := auth.CreatePasswordSHA(*p.req.Password, util.SaltSize)
-	fmt.Println(hashedPassword, saltString)
+	authDM := model.NewUserAuthDM(p.ctx)
+	h := handler.NewAuthHandler(p.ctx, authDM)
+
+	userID, err := h.DefaultSignup(p.req.Username, p.req.Password)
+	if err != nil {
+		return err
+	}
+
+	err = util.GenerateTokenAndAddCookies(p.ctx, strconv.Itoa(int(*userID)))
+	if err != nil {
+		return cerr.New(err.Error(), http.StatusBadGateway)
+	}
+
+	p.resp.UserID = userID
 
 	return nil
 }
