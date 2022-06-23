@@ -1,11 +1,14 @@
-package service
+package facebook
 
 import (
 	"context"
 
-	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/clog"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/http_util"
 )
+
+type Service interface {
+	Login(accessToken string) (userID string, userName string, err error)
+}
 
 type FacebookService struct {
 	ctx context.Context
@@ -26,7 +29,7 @@ func NewFacebookService(ctx context.Context) *FacebookService {
 	}
 }
 
-func (s *FacebookService) Login(accessToken string) (userID string, userName string, err error) {
+func (s *FacebookService) Login(accessToken string) (userID string, username string, err error) {
 	var resp getUserResponse
 
 	url := getUserURL + "?access_token=" + accessToken
@@ -35,8 +38,7 @@ func (s *FacebookService) Login(accessToken string) (userID string, userName str
 		&resp,
 	)
 	if err != nil {
-		clog.Error(s.ctx, err.Error())
-		return
+		return "", "", err
 	}
 
 	return resp.Id, resp.Name, nil

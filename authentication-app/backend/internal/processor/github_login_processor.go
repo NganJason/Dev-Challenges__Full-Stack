@@ -2,45 +2,36 @@ package processor
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strconv"
 
-	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/service"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/handler"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/model"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/service/github"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/util"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/vo"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cerr"
-	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/clog"
-	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cookies"
 )
 
 func GithubLoginProcessor(ctx context.Context, req, resp interface{}) error {
 	request := req.(*vo.GithubLoginRequest)
 	response := resp.(*vo.GithubLoginResponse)
 
-	s := service.NewGithubService(ctx)
+	userAuthDM := model.NewUserAuthDM(ctx)
 
-	clog.Info(ctx, "received access token, processing")
-	userID, err := s.Login(request.AccessCode, "")
+	h := handler.NewAuthHandler(ctx, userAuthDM)
+	h.SetGithubService(github.NewGithubService(ctx))
+
+	userID, err := h.LoginGithub(request.AccessCode)
 	if err != nil {
 		return err
 	}
 
-	jwt, err := util.GenerateJWTToken(strconv.Itoa(int(userID)))
+	err = util.GenerateTokenAndAddCookies(ctx, strconv.Itoa(int(*userID)))
 	if err != nil {
-		err = cerr.New(
-			fmt.Sprintf("generate jwt token err=%s", err.Error()),
-			http.StatusBadGateway,
-		)
-
-		clog.Error(ctx, err.Error())
-
-		return err
+		return cerr.New(err.Error(), http.StatusBadGateway)
 	}
 
-	c := cookies.CreateCookie(jwt)
-	cookies.AddServerCookieToCtx(ctx, c)
-
-	response.UserID = &userID
+	response.UserID = userID
 	return nil
 }

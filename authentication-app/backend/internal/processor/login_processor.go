@@ -2,14 +2,14 @@ package processor
 
 import (
 	"context"
-	"fmt"
 	"net/http"
+	"strconv"
 
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/handler"
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/model"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/util"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/vo"
-	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/auth"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cerr"
-	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/cookies"
 )
 
 func LoginProcessor(ctx context.Context, req, resp interface{}) error {
@@ -37,36 +37,20 @@ func (p *loginProcessor) process() error {
 		return err
 	}
 
-	p.resp.IsAuth = vo.BoolPtr(false)
+	authDM := model.NewUserAuthDM(p.ctx)
+	h := handler.NewAuthHandler(p.ctx, authDM)
 
-	// Get username, hashedPassword and saltstring from DB
-	userName := "jason"
-	hashedPasswordInDB := "abc"
-	saltInDB := "123"
-
-	if userName == "" {
-		return cerr.New("cannot find username from DB", http.StatusBadRequest)
-	}
-
-	isPasswordMatch := auth.ComparePasswordSHA(*p.req.Password, hashedPasswordInDB, saltInDB)
-
-	if !isPasswordMatch {
-		return cerr.New("password and username does not match", http.StatusBadRequest)
-	}
-
-	jwt, err := util.GenerateJWTToken(*p.req.Username)
+	userID, err := h.DefaultLogin(p.req.Username, p.req.Password)
 	if err != nil {
-		return cerr.New(
-			fmt.Sprintf("generate jwt err=%s", err.Error()),
-			http.StatusBadGateway,
-		)
+		return err
 	}
 
-	c := cookies.CreateCookie(jwt)
-	cookies.AddServerCookieToCtx(p.ctx, c)
+	err = util.GenerateTokenAndAddCookies(p.ctx, strconv.Itoa(int(*userID)))
+	if err != nil {
+		return cerr.New(err.Error(), http.StatusBadGateway)
+	}
 
-	p.resp.JWT = &jwt
-	p.resp.IsAuth = vo.BoolPtr(true)
+	p.resp.UserID = userID
 
 	return nil
 }
