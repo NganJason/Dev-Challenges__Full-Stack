@@ -2,9 +2,11 @@ package handler
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/model"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/service/facebook"
@@ -51,7 +53,6 @@ func (h *authHandler) LoginGithub(accessCode *string) (userID *uint64, err error
 
 	userAuth, err := h.authDM.GetUserAuth(
 		nil,
-		nil,
 		util.StrPtr(strconv.Itoa(int(githubUserID))),
 		util.IntPtr(model.GithubAuthMethod),
 	)
@@ -63,15 +64,27 @@ func (h *authHandler) LoginGithub(accessCode *string) (userID *uint64, err error
 	}
 
 	if userAuth == nil {
-		return nil, cerr.New(
-			"cannot find user",
-			http.StatusUnauthorized,
+		githubUserIDStr := strconv.Itoa(int(githubUserID))
+
+		id, err := h.authDM.CreateUserAuth(
+			&model.CreateUserAuthRequest{
+				LoginID:    &githubUserIDStr,
+				AuthMethod: model.GithubAuthMethod,
+			},
 		)
+		if err != nil {
+			return nil, cerr.New(
+				fmt.Sprintf(
+					"cannot find and create user err=%s", err.Error(),
+				),
+				http.StatusUnauthorized,
+			)
+		}
+
+		return &id, nil
 	}
 
-	userID = &userAuth.ID
-
-	return userID, nil
+	return userAuth.ID, nil
 }
 
 func (h *authHandler) LoginFacebook(accessCode *string) (userID *uint64, err error) {
@@ -92,7 +105,6 @@ func (h *authHandler) LoginFacebook(accessCode *string) (userID *uint64, err err
 
 	userAuth, err := h.authDM.GetUserAuth(
 		nil,
-		nil,
 		util.StrPtr(fbUserID),
 		util.IntPtr(model.FacebookAuthMethod),
 	)
@@ -104,15 +116,25 @@ func (h *authHandler) LoginFacebook(accessCode *string) (userID *uint64, err err
 	}
 
 	if userAuth == nil {
-		return nil, cerr.New(
-			"cannot find user",
-			http.StatusUnauthorized,
+		id, err := h.authDM.CreateUserAuth(
+			&model.CreateUserAuthRequest{
+				LoginID:    &fbUserID,
+				AuthMethod: model.FacebookAuthMethod,
+			},
 		)
+		if err != nil {
+			return nil, cerr.New(
+				fmt.Sprintf(
+					"cannot find and create user err=%s", err.Error(),
+				),
+				http.StatusUnauthorized,
+			)
+		}
+
+		return &id, nil
 	}
 
-	userID = &userAuth.ID
-
-	return userID, nil
+	return userAuth.ID, nil
 }
 
 func (h *authHandler) LoginGoogle(subID *string) (userID *uint64, err error) {
@@ -125,7 +147,6 @@ func (h *authHandler) LoginGoogle(subID *string) (userID *uint64, err error) {
 
 	userAuth, err := h.authDM.GetUserAuth(
 		nil,
-		nil,
 		subID,
 		util.IntPtr(model.GoogleAuthMethod),
 	)
@@ -137,15 +158,25 @@ func (h *authHandler) LoginGoogle(subID *string) (userID *uint64, err error) {
 	}
 
 	if userAuth == nil {
-		return nil, cerr.New(
-			"cannot find user",
-			http.StatusUnauthorized,
+		id, err := h.authDM.CreateUserAuth(
+			&model.CreateUserAuthRequest{
+				LoginID:    subID,
+				AuthMethod: model.GoogleAuthMethod,
+			},
 		)
+		if err != nil {
+			return nil, cerr.New(
+				fmt.Sprintf(
+					"cannot find and create user err=%s", err.Error(),
+				),
+				http.StatusUnauthorized,
+			)
+		}
+
+		return &id, nil
 	}
 
-	userID = &userAuth.ID
-
-	return userID, nil
+	return userAuth.ID, nil
 }
 
 func (h *authHandler) DefaultLogin(username *string, password *string) (userID *uint64, err error) {
@@ -159,7 +190,6 @@ func (h *authHandler) DefaultLogin(username *string, password *string) (userID *
 	userAuth, err := h.authDM.GetUserAuth(
 		nil,
 		username,
-		nil,
 		util.IntPtr(model.DefaultAuthMethod),
 	)
 	if err != nil {
@@ -176,20 +206,21 @@ func (h *authHandler) DefaultLogin(username *string, password *string) (userID *
 		)
 	}
 
+	var realHashedPasswordStr = strings.Replace(string(userAuth.HashedPassword), "\"", "", -1)
 	isPasswordMatch := auth.ComparePasswordSHA(
 		*password,
-		userAuth.HashedPassword,
-		userAuth.Salt,
+		realHashedPasswordStr,
+		*userAuth.Salt,
 	)
 
 	if !isPasswordMatch {
 		return nil, cerr.New(
-			"password is wrong",
+			"wrong password",
 			http.StatusUnauthorized,
 		)
 	}
 
-	return &userAuth.ID, nil
+	return userAuth.ID, nil
 }
 
 func (h *authHandler) DefaultSignup(username, password *string) (userID *uint64, err error) {
@@ -201,7 +232,7 @@ func (h *authHandler) DefaultSignup(username, password *string) (userID *uint64,
 	}
 
 	existingUserAuth, err := h.authDM.GetUserAuth(
-		nil, username, nil, util.IntPtr(model.DefaultAuthMethod),
+		nil, username, util.IntPtr(model.DefaultAuthMethod),
 	)
 	if err != nil {
 		return nil, cerr.New(
@@ -218,12 +249,20 @@ func (h *authHandler) DefaultSignup(username, password *string) (userID *uint64,
 	}
 
 	hashedPassword, salt := auth.CreatePasswordSHA(*password, 16)
+	fmt.Println(hashedPassword)
+	hashedBytes, err := json.Marshal(hashedPassword)
+	if err != nil {
+		return nil, cerr.New(
+			fmt.Sprintf("marshal hashedpassword err=%s", err.Error()),
+			http.StatusBadGateway,
+		)
+	}
 
 	ID, err := h.authDM.CreateUserAuth(
 		&model.CreateUserAuthRequest{
-			Username:       *username,
+			LoginID:        username,
 			AuthMethod:     model.DefaultAuthMethod,
-			HashedPassword: &hashedPassword,
+			HashedPassword: hashedBytes,
 			Salt:           &salt,
 		},
 	)
@@ -248,8 +287,7 @@ func (h *authHandler) ValidateUser(userID *string) (bool, error) {
 	}
 
 	userIDInt64 := uint64(userIDInt)
-
-	userIDFromDB, err := h.authDM.GetUserAuth(&userIDInt64, nil, nil, nil)
+	userIDFromDB, err := h.authDM.GetUserAuth(&userIDInt64, nil, nil)
 	if err != nil {
 		return false, cerr.New(
 			fmt.Sprintf("get userID err=%s", err.Error()),

@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"sync"
 
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/clog"
 )
@@ -15,23 +14,18 @@ type Config struct {
 }
 
 const (
-	configFilePath = "../config/config.json"
+	configFilePath = "./internal/config/config.json"
 )
 
 var (
 	GlobalConfig *Config
-	once         sync.Once
 )
 
 func GetConfig() *Config {
-	once.Do(func() {
-		initConfig()
-	})
-
 	return GlobalConfig
 }
 
-func initConfig() {
+func InitConfig() {
 	configFile, _ := os.Open(configFilePath)
 	defer configFile.Close()
 
@@ -47,4 +41,5 @@ func initConfig() {
 	}
 
 	GlobalConfig = &configuration
+	initDBs()
 }

@@ -24,23 +24,22 @@ func NewUserAuthDM(ctx context.Context) UserAuthInterface {
 }
 
 func (dm *userAuthDM) GetUserAuth(
-	id *uint64,
-	username *string,
-	externalID *string,
+	userID *uint64,
+	loginID *string,
 	authMethod *int,
 ) (*UserAuth, error) {
 	var userAuth UserAuth
 
-	if username == nil && id == nil && externalID == nil {
+	if userID == nil && loginID == nil {
 		return nil, cerr.New(
-			"must provide either userID, username or externalID",
+			"must provide either userID or loginID",
 			http.StatusBadRequest,
 		)
 	}
 
-	if authMethod == nil {
+	if userID == nil && authMethod == nil {
 		return nil, cerr.New(
-			"auth_method cannot be empty",
+			"auth_method and userID cannot both be empty",
 			http.StatusBadRequest,
 		)
 	}
@@ -53,14 +52,14 @@ func (dm *userAuthDM) GetUserAuth(
 	whereCols := make([]string, 0)
 	args := make([]interface{}, 0)
 
-	if username != nil {
-		whereCols = append(whereCols, "username = ?")
-		args = append(args, *username)
+	if userID != nil {
+		whereCols = append(whereCols, "id = ?")
+		args = append(args, *userID)
 	}
 
-	if externalID != nil {
-		whereCols = append(whereCols, "external_id = ?")
-		args = append(args, *username)
+	if loginID != nil {
+		whereCols = append(whereCols, "login_id = ?")
+		args = append(args, *loginID)
 	}
 
 	if authMethod != nil {
@@ -75,9 +74,19 @@ func (dm *userAuthDM) GetUserAuth(
 		query,
 		args...,
 	).Scan(
-		&userAuth,
+		&userAuth.ID,
+		&userAuth.LoginID,
+		&userAuth.AuthMethod,
+		&userAuth.HashedPassword,
+		&userAuth.Salt,
+		&userAuth.CreatedAt,
+		&userAuth.UpdatedAt,
 	)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+
 		return nil, cerr.New(
 			fmt.Sprintf("query userAuth err=%s", err.Error()),
 			http.StatusBadGateway,
@@ -88,13 +97,6 @@ func (dm *userAuthDM) GetUserAuth(
 }
 
 func (dm *userAuthDM) CreateUserAuth(req *CreateUserAuthRequest) (uint64, error) {
-	if req.Username == "" {
-		return 0, cerr.New(
-			"username cannot be empty for user auth creation",
-			http.StatusBadRequest,
-		)
-	}
-
 	if req.AuthMethod == 0 {
 		return 0, cerr.New(
 			"invalid auth method",
@@ -102,7 +104,7 @@ func (dm *userAuthDM) CreateUserAuth(req *CreateUserAuthRequest) (uint64, error)
 		)
 	}
 
-	existingUser, err := dm.GetUserAuth(nil, &req.Username, req.ExternalID, &req.AuthMethod)
+	existingUser, err := dm.GetUserAuth(nil, req.LoginID, &req.AuthMethod)
 	if err != nil {
 		return 0, cerr.New(
 			fmt.Sprintf("get existing user err=%s", err.Error()),
@@ -119,16 +121,15 @@ func (dm *userAuthDM) CreateUserAuth(req *CreateUserAuthRequest) (uint64, error)
 
 	query := fmt.Sprintf(
 		`
-		INSERT INTO %s (username, auth_method, external_id, hashed_password, salt)
-		VALUES(?, ?, ?, ?, ?)
+		INSERT INTO %s (login_id, auth_method, hashed_password, salt)
+		VALUES(?, ?, ?, ?)
 		`, dm.getTableName(),
 	)
 
 	result, err := dm.db.Exec(
 		query,
-		req.Username,
+		req.LoginID,
 		req.AuthMethod,
-		req.ExternalID,
 		req.HashedPassword,
 		req.Salt,
 	)

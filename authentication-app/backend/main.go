@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/config"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/processor"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/clog"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/wrapper"
@@ -14,6 +15,7 @@ import (
 func main() {
 	ctx := context.Background()
 	mux := http.NewServeMux()
+	config.InitConfig()
 
 	for _, proc := range processor.GetAllProcessors() {
 		mux.HandleFunc(
@@ -33,7 +35,6 @@ func main() {
 			AllowedOrigins:   []string{"http://localhost:3001"},
 			AllowCredentials: true,
 			AllowedMethods:   []string{"POST", "GET", "OPTIONS"},
-			Debug:            true,
 		},
 	)
 	handler := c.Handler(mux)

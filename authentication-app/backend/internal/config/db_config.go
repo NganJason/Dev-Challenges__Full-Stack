@@ -4,8 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"sync"
 	"time"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type Database struct {
@@ -24,15 +25,10 @@ type dbs struct {
 }
 
 var (
-	globalDBs *dbs
-	dbOnce    sync.Once
+	globalDBs = new(dbs)
 )
 
 func GetDBs() *dbs {
-	dbOnce.Do(func() {
-		initDBs()
-	})
-
 	return globalDBs
 }
 

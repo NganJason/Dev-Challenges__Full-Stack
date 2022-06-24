@@ -13,8 +13,21 @@ import (
 )
 
 func SignupProcessor(ctx context.Context, req, resp interface{}) error {
-	request := req.(*vo.SignupRequest)
-	response := resp.(*vo.SignupResponse)
+	request, ok := req.(*vo.SignupRequest)
+	if !ok {
+		return cerr.New(
+			"convert request body error",
+			http.StatusBadRequest,
+		)
+	}
+
+	response, ok := resp.(*vo.SignupResponse)
+	if !ok {
+		return cerr.New(
+			"convert response body error",
+			http.StatusBadRequest,
+		)
+	}
 
 	p := signupProcessor{
 		ctx:  ctx,
