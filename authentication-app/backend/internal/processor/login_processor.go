@@ -13,8 +13,21 @@ import (
 )
 
 func LoginProcessor(ctx context.Context, req, resp interface{}) error {
-	request := req.(*vo.LoginRequest)
-	response := resp.(*vo.LoginResponse)
+	request, ok := req.(*vo.LoginRequest)
+	if !ok {
+		return cerr.New(
+			"convert request body error",
+			http.StatusBadRequest,
+		)
+	}
+
+	response, ok := resp.(*vo.LoginResponse)
+	if !ok {
+		return cerr.New(
+			"convert response body error",
+			http.StatusBadRequest,
+		)
+	}
 
 	p := loginProcessor{
 		ctx:  ctx,
