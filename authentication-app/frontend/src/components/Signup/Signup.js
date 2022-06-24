@@ -7,10 +7,10 @@ import Github from "./Github";
 
 import lightThemeDevLogo from "../../assets/devchallenges.svg"
 import darkThemeDevLogo from "../../assets/devchallenges-light.svg";
-import twitterLogo from "../../assets/Twitter.svg";
 
 import Google from "./Google";
 import Facebook from "./Facebook";
+import { NewService } from "../../service/service";
 
 
 function Signup({isSignup, setIsAuth}) {
@@ -28,7 +28,37 @@ function Signup({isSignup, setIsAuth}) {
   }
 
   const onSubmit = () => {
-    console.log(username, password)
+    let s = NewService()
+    const url = "http://localhost:3001";
+
+    if (isSignup) {
+      s.DefaultSignup(username, password)
+      .then(function(resp) {
+        setIsAuth(true);
+        window.history.pushState({}, null, url);
+        window.location.reload(true);
+      })
+      .catch(function(err) { 
+        console.log(err)
+      })
+    } else {
+      s.DefaultLogin(username, password)
+        .then(function (resp) {
+          setIsAuth(true);
+          window.history.pushState({}, null, url);
+          window.location.reload(true);
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+    }
+
+    clearFields()
+  }
+
+  const clearFields = () => {
+    setUsername("")
+    setPassword("")
   }
 
   const getFormTitle = () => {
@@ -60,14 +90,14 @@ function Signup({isSignup, setIsAuth}) {
     if (isSignup) {
       return (
         <div>
-          Already a member? <a href="http://localhost:3001/login">Login</a>
+          Already a member? <a href="http://localhost:3001/auth/login">Login</a>
         </div>
       )
     } else {
       return (
         <div>
           Don't have an account yet?{" "}
-          <a href="http://localhost:3001/signup">Register</a>
+          <a href="http://localhost:3001/auth/signup">Register</a>
         </div>
       ); 
     }
@@ -115,7 +145,6 @@ function Signup({isSignup, setIsAuth}) {
       <div className="social-icons">
         <Google setIsAuth={setIsAuth} />
         <Facebook setIsAuth={setIsAuth} />
-        <img src={twitterLogo} alt="twitter-icon" />
         <Github setIsAuth={setIsAuth} />
       </div>
       <Text bd="400" size="0.9rem" align="center" color="secondary">

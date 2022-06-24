@@ -10,7 +10,8 @@ import Info from "./components/Info/Info";
 
 import "./styles/main.scss"
 import { useUserData } from "./hooks/useUserData";
-import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import ProtectedRoute from "./components/CustomRoute/ProtectedRoute";
+import AuthRoute from "./components/CustomRoute/AuthRoute";
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -33,10 +34,16 @@ function App() {
     <div className={`App bg-primary ${isDarkTheme ? "dark" : ""}`}>
       <BrowserRouter>
         <Routes>
-          <Route
-            path="signup"
-            element={<Signup isSignup={true} setIsAuth={setIsAuth} />}
-          />
+          <Route path="/auth" element={<AuthRoute isAuth={isAuth} />}>
+            <Route
+              path="signup"
+              element={<Signup isSignup={true} setIsAuth={setIsAuth} />}
+            />
+            <Route
+              path="login"
+              element={<Signup isSignup={false} setIsAuth={setIsAuth} />}
+            />
+          </Route>
 
           <Route
             element={<ProtectedRoute isAuth={isAuth} setIsAuth={setIsAuth} />}

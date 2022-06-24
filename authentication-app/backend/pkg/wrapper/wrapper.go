@@ -3,7 +3,6 @@ package wrapper
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"reflect"
@@ -38,9 +37,14 @@ func Wrapper(
 		newReq := reflect.New(reflect.TypeOf(req).Elem()).Interface()
 		newResp := reflect.New(reflect.TypeOf(resp).Elem()).Interface()
 
-		err := cerr.GetErrFromCtx(r.Context())
+		ctx := clog.ContextWithTraceID(
+			r.Context(),
+			strconv.Itoa(int(time.Now().Unix())),
+		)
+
+		err := cerr.GetErrFromCtx(ctx)
 		if err != nil {
-			writeToClient(w, newResp, err)
+			writeToClient(ctx, w, newResp, err)
 			return
 		}
 
@@ -49,38 +53,33 @@ func Wrapper(
 			if err == io.EOF {
 				newReq = nil
 			} else {
-				writeToClient(w, newResp, err)
+				writeToClient(ctx, w, newResp, err)
 				return
 			}
 		}
-
-		ctx := clog.ContextWithTraceID(
-			r.Context(),
-			strconv.Itoa(int(time.Now().Unix())),
-		)
 
 		ctx = cookies.InitServerCookie(ctx)
 
 		err = proc(ctx, newReq, newResp)
 		if err != nil {
-			writeToClient(w, newResp, err)
+			writeToClient(ctx, w, newResp, err)
 			return
 		}
 
 		setCookie(ctx, w)
 
-		writeToClient(w, newResp, nil)
+		writeToClient(ctx, w, newResp, nil)
 	}
 }
 
-func writeToClient(w http.ResponseWriter, resp interface{}, err error) {
+func writeToClient(ctx context.Context, w http.ResponseWriter, resp interface{}, err error) {
 	w.Header().Set("Content-Type", "application/json")
 
 	if err != nil {
 		code := cerr.Code(err)
 		w.WriteHeader(code)
 
-		setDebugMessage(resp, err.Error())
+		setDebugMessage(ctx, resp, err.Error())
 	} else {
 		w.WriteHeader(http.StatusOK)
 	}
@@ -89,7 +88,7 @@ func writeToClient(w http.ResponseWriter, resp interface{}, err error) {
 	w.Write(jsonResp)
 }
 
-func setDebugMessage(resp interface{}, msg string) {
+func setDebugMessage(ctx context.Context, resp interface{}, msg string) {
 	if resp == nil {
 		return
 	}
@@ -97,7 +96,7 @@ func setDebugMessage(resp interface{}, msg string) {
 	debugMsgField := "DebugMsg"
 	structField, found := reflect.TypeOf(resp).Elem().FieldByName(debugMsgField)
 	if !found {
-		fmt.Println("not found")
+		clog.Error(ctx, "debug_msg not found")
 		return
 	}
 

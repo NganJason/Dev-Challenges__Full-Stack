@@ -249,7 +249,6 @@ func (h *authHandler) DefaultSignup(username, password *string) (userID *uint64,
 	}
 
 	hashedPassword, salt := auth.CreatePasswordSHA(*password, 16)
-	fmt.Println(hashedPassword)
 	hashedBytes, err := json.Marshal(hashedPassword)
 	if err != nil {
 		return nil, cerr.New(
