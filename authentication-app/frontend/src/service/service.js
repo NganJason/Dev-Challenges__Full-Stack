@@ -40,7 +40,7 @@ class Service {
           email: email,
           sub_id: subID
         },
-        {withCredentials: true}
+        { withCredentials: true }
       )
       .then(function(resp) {
         return resp;
@@ -58,7 +58,45 @@ class Service {
         {
           access_code: accessCode,
         },
-        {withCredentials: true}
+        { withCredentials: true }
+      )
+      .then(function(resp) {
+        return resp;
+      })
+      .catch(function(error) {
+        throw new Error(error.response.data.debug_msg)
+      })
+    }
+
+    DefaultSignup(username, password) {
+      let url = this.baseURL + "signup"
+
+      return axios.post(
+        url,
+        {
+          username: username,
+          password: password,
+        },
+        { withCredentials: true }
+      )
+      .then(function(resp) {
+        return resp;
+      })
+      .catch(function(error) {
+        throw new Error(error.response.data.debug_msg)
+      })
+    }
+
+    DefaultLogin(username, password) {
+      let url = this.baseURL + "login"
+
+      return axios.post(
+        url,
+        {
+          username: username,
+          password: password,
+        },
+        { withCredentials: true }
       )
       .then(function(resp) {
         return resp;
@@ -72,9 +110,8 @@ class Service {
       let url = this.baseURL + "login/verify_auth"
 
       return axios.get(
-        url, {
-          withCredentials: true
-        }
+        url,
+        { withCredentials: true }
       ).then(function (resp) {
         return resp;
       }).catch(function (error) {
