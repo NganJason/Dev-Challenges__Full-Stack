@@ -22,16 +22,17 @@ func GithubLoginProcessor(ctx context.Context, req, resp interface{}) error {
 	h := handler.NewAuthHandler(ctx, userAuthDM)
 	h.SetGithubService(github.NewGithubService(ctx))
 
-	userID, err := h.LoginGithub(request.AccessCode)
+	userInfo, err := h.LoginGithub(request.AccessCode)
 	if err != nil {
 		return err
 	}
 
-	err = util.GenerateTokenAndAddCookies(ctx, strconv.Itoa(int(*userID)))
+	err = util.GenerateTokenAndAddCookies(ctx, strconv.Itoa(int(*userInfo.UserID)))
 	if err != nil {
 		return cerr.New(err.Error(), http.StatusBadGateway)
 	}
 
-	response.UserID = userID
+	response.UserInfo = userInfo
+
 	return nil
 }

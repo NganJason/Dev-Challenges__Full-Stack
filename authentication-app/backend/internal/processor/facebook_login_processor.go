@@ -26,17 +26,17 @@ func FacebookLoginProcessor(ctx context.Context, req, resp interface{}) error {
 	h := handler.NewAuthHandler(ctx, userAuthDM)
 	h.SetFacebookService(facebook.NewFacebookService(ctx))
 
-	userID, err := h.LoginFacebook(request.AccessCode)
+	userInfo, err := h.LoginFacebook(request.AccessCode)
 	if err != nil {
 		return err
 	}
 
-	err = util.GenerateTokenAndAddCookies(ctx, strconv.Itoa(int(*userID)))
+	err = util.GenerateTokenAndAddCookies(ctx, strconv.Itoa(int(*userInfo.UserID)))
 	if err != nil {
 		return cerr.New(err.Error(), http.StatusBadGateway)
 	}
 
-	response.UserID = userID
+	response.UserInfo = userInfo
 
 	return nil
 }
