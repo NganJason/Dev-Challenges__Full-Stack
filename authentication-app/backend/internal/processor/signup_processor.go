@@ -53,17 +53,17 @@ func (p *signupProcessor) process() error {
 	authDM := model.NewUserAuthDM(p.ctx)
 	h := handler.NewAuthHandler(p.ctx, authDM)
 
-	userID, err := h.DefaultSignup(p.req.Username, p.req.Password)
+	userInfo, err := h.DefaultSignup(p.req.Username, p.req.Password)
 	if err != nil {
 		return err
 	}
 
-	err = util.GenerateTokenAndAddCookies(p.ctx, strconv.Itoa(int(*userID)))
+	err = util.GenerateTokenAndAddCookies(p.ctx, strconv.Itoa(int(*userInfo.UserID)))
 	if err != nil {
 		return cerr.New(err.Error(), http.StatusBadGateway)
 	}
 
-	p.resp.UserID = userID
+	p.resp.UserInfo = userInfo
 
 	return nil
 }

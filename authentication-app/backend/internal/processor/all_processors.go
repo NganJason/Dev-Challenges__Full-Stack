@@ -53,5 +53,26 @@ func GetAllProcessors() []ProcessorConfig {
 			Resp:      &vo.VerifyAuthResponse{},
 			NeedAuth:  true,
 		},
+		{
+			Path:      "/api/user_info/create",
+			Processor: CreateUserInfoProcessor,
+			Req:       &vo.CreateUserInfoRequest{},
+			Resp:      &vo.CreateUserInfoResponse{},
+			NeedAuth:  false,
+		},
+		{
+			Path:      "/api/user_info/update",
+			Processor: UpdateUserInfoProcessor,
+			Req:       &vo.UpdateUserInfoRequest{},
+			Resp:      &vo.UpdateUserInfoResponse{},
+			NeedAuth:  false,
+		},
+		{
+			Path:      "/api/user_info/get",
+			Processor: GetUserInfoProcessor,
+			Req:       &vo.GetUserInfoRequest{},
+			Resp:      &vo.GetUserInfoResponse{},
+			NeedAuth:  false,
+		},
 	}
 }

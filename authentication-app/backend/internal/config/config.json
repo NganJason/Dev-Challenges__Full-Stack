@@ -1,0 +1,12 @@
+{
+  "auth_db": {
+    "db_username": "root",
+    "db_password": "Admin123",
+    "db_port": "3306",
+    "db_name": "auth_app_db",
+    "pool_max_open": 100,
+    "pool_max_idle": 50,
+    "max_idle_seconds": 200,
+    "max_life_seconds": 0
+  }
+}

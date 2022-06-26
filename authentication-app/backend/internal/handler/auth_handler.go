@@ -17,10 +17,11 @@ import (
 )
 
 type authHandler struct {
-	ctx    context.Context
-	fb     facebook.Service
-	github github.Service
-	authDM model.UserAuthInterface
+	ctx        context.Context
+	fb         facebook.Service
+	github     github.Service
+	authDM     model.UserAuthInterface
+	userInfoDM model.UserInfoInterface
 }
 
 func NewAuthHandler(ctx context.Context, authDM model.UserAuthInterface) *authHandler {
@@ -38,7 +39,11 @@ func (h *authHandler) SetFacebookService(service facebook.Service) {
 	h.fb = service
 }
 
-func (h *authHandler) LoginGithub(accessCode *string) (userID *uint64, err error) {
+func (h *authHandler) SetUserInfoDM(userInfoDM model.UserInfoInterface) {
+	h.userInfoDM = userInfoDM
+}
+
+func (h *authHandler) LoginGithub(accessCode *string) (userInfo *model.UserInfo, err error) {
 	if accessCode == nil {
 		return nil, cerr.New(
 			"access code cannot be empty",
@@ -81,13 +86,31 @@ func (h *authHandler) LoginGithub(accessCode *string) (userID *uint64, err error
 			)
 		}
 
-		return &id, nil
+		userInfo, err := h.userInfoDM.CreateUserInfo(&model.CreateUserInfoRequest{
+			UserID: &id,
+		})
+		if err != nil {
+			return nil, cerr.New(
+				fmt.Sprintf("create userInfo for new user err=%s", err.Error()),
+				cerr.Code(err),
+			)
+		}
+
+		return userInfo, nil
 	}
 
-	return userAuth.ID, nil
+	userInfo, err = h.userInfoDM.GetUserInfo(nil, userAuth.ID)
+	if err != nil {
+		return nil, cerr.New(
+			fmt.Sprintf("get userInfo err=%s", err.Error()),
+			cerr.Code(err),
+		)
+	}
+
+	return userInfo, nil
 }
 
-func (h *authHandler) LoginFacebook(accessCode *string) (userID *uint64, err error) {
+func (h *authHandler) LoginFacebook(accessCode *string) (userInfo *model.UserInfo, err error) {
 	if accessCode == nil {
 		return nil, cerr.New(
 			"access code cannot be empty",
@@ -131,13 +154,31 @@ func (h *authHandler) LoginFacebook(accessCode *string) (userID *uint64, err err
 			)
 		}
 
-		return &id, nil
+		userInfo, err := h.userInfoDM.CreateUserInfo(&model.CreateUserInfoRequest{
+			UserID: &id,
+		})
+		if err != nil {
+			return nil, cerr.New(
+				fmt.Sprintf("create userInfo for new user err=%s", err.Error()),
+				cerr.Code(err),
+			)
+		}
+
+		return userInfo, nil
 	}
 
-	return userAuth.ID, nil
+	userInfo, err = h.userInfoDM.GetUserInfo(nil, userAuth.ID)
+	if err != nil {
+		return nil, cerr.New(
+			fmt.Sprintf("get userInfo err=%s", err.Error()),
+			cerr.Code(err),
+		)
+	}
+
+	return userInfo, nil
 }
 
-func (h *authHandler) LoginGoogle(subID *string) (userID *uint64, err error) {
+func (h *authHandler) LoginGoogle(subID *string) (userInfo *model.UserInfo, err error) {
 	if subID == nil {
 		return nil, cerr.New(
 			"subID cannot be empty",
@@ -173,13 +214,31 @@ func (h *authHandler) LoginGoogle(subID *string) (userID *uint64, err error) {
 			)
 		}
 
-		return &id, nil
+		userInfo, err := h.userInfoDM.CreateUserInfo(&model.CreateUserInfoRequest{
+			UserID: &id,
+		})
+		if err != nil {
+			return nil, cerr.New(
+				fmt.Sprintf("create userInfo for new user err=%s", err.Error()),
+				cerr.Code(err),
+			)
+		}
+
+		return userInfo, nil
 	}
 
-	return userAuth.ID, nil
+	userInfo, err = h.userInfoDM.GetUserInfo(nil, userAuth.ID)
+	if err != nil {
+		return nil, cerr.New(
+			fmt.Sprintf("get userInfo err=%s", err.Error()),
+			cerr.Code(err),
+		)
+	}
+
+	return userInfo, nil
 }
 
-func (h *authHandler) DefaultLogin(username *string, password *string) (userID *uint64, err error) {
+func (h *authHandler) DefaultLogin(username *string, password *string) (userInfo *model.UserInfo, err error) {
 	if username == nil || password == nil {
 		return nil, cerr.New(
 			"username and password cannot be empty",
@@ -220,10 +279,18 @@ func (h *authHandler) DefaultLogin(username *string, password *string) (userID *
 		)
 	}
 
-	return userAuth.ID, nil
+	userInfo, err = h.userInfoDM.GetUserInfo(nil, userAuth.ID)
+	if err != nil {
+		return nil, cerr.New(
+			fmt.Sprintf("get userInfo err=%s", err.Error()),
+			cerr.Code(err),
+		)
+	}
+
+	return userInfo, nil
 }
 
-func (h *authHandler) DefaultSignup(username, password *string) (userID *uint64, err error) {
+func (h *authHandler) DefaultSignup(username, password *string) (userInfo *model.UserInfo, err error) {
 	if username == nil || password == nil {
 		return nil, cerr.New(
 			"username and password cannot be empty",
@@ -269,7 +336,17 @@ func (h *authHandler) DefaultSignup(username, password *string) (userID *uint64,
 		return nil, err
 	}
 
-	return &ID, nil
+	userInfo, err = h.userInfoDM.CreateUserInfo(&model.CreateUserInfoRequest{
+		UserID: &ID,
+	})
+	if err != nil {
+		return nil, cerr.New(
+			fmt.Sprintf("create userInfo for new user err=%s", err.Error()),
+			cerr.Code(err),
+		)
+	}
+
+	return userInfo, nil
 }
 
 func (h *authHandler) ValidateUser(userID *string) (bool, error) {

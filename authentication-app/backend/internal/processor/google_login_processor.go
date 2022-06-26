@@ -23,16 +23,17 @@ func GoogleLoginProcessor(ctx context.Context, req, resp interface{}) error {
 	userAuthDM := model.NewUserAuthDM(ctx)
 	h := handler.NewAuthHandler(ctx, userAuthDM)
 
-	userID, err := h.LoginGoogle(request.SubID)
+	userInfo, err := h.LoginGoogle(request.SubID)
 	if err != nil {
 		return err
 	}
 
-	err = util.GenerateTokenAndAddCookies(ctx, strconv.Itoa(int(*userID)))
+	err = util.GenerateTokenAndAddCookies(ctx, strconv.Itoa(int(*userInfo.UserID)))
 	if err != nil {
 		return cerr.New(err.Error(), http.StatusBadGateway)
 	}
 
-	response.UserID = userID
+	response.UserInfo = userInfo
+
 	return nil
 }

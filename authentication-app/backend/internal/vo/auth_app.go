@@ -1,5 +1,9 @@
 package vo
 
+import (
+	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/model"
+)
+
 const (
 	GithubClientSecret = "2d894c196dcba01892957b3759d9d7ddde4e5531"
 	GithubClientID     = "85de73f0c04a2f06d9d5"
@@ -11,8 +15,8 @@ type GithubLoginRequest struct {
 }
 
 type GithubLoginResponse struct {
-	DebugMsg *string `json:"debug_msg"`
-	UserID   *uint64 `json:"user_id"`
+	DebugMsg *string         `json:"debug_msg"`
+	UserInfo *model.UserInfo `json:"user_info"`
 }
 
 type VerifyAuthRequest struct{}
@@ -28,8 +32,8 @@ type GoogleLoginRequest struct {
 }
 
 type GoogleLoginResponse struct {
-	DebugMsg *string `json:"debug_msg"`
-	UserID   *uint64 `json:"user_id"`
+	DebugMsg *string         `json:"debug_msg"`
+	UserInfo *model.UserInfo `json:"user_info"`
 }
 
 type FacebookLoginRequest struct {
@@ -37,8 +41,8 @@ type FacebookLoginRequest struct {
 }
 
 type FacebookLoginResponse struct {
-	DebugMsg *string `json:"debug_msg"`
-	UserID   *uint64 `json:"user_id"`
+	DebugMsg *string         `json:"debug_msg"`
+	UserInfo *model.UserInfo `json:"user_info"`
 }
 
 type SignupRequest struct {
@@ -47,8 +51,8 @@ type SignupRequest struct {
 }
 
 type SignupResponse struct {
-	DebugMsg *string `json:"debug_msg"`
-	UserID   *uint64 `json:"user_id"`
+	DebugMsg *string         `json:"debug_msg"`
+	UserInfo *model.UserInfo `json:"user_info"`
 }
 
 type LoginRequest struct {
@@ -57,6 +61,40 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	DebugMsg *string `json:"debug_msg"`
+	DebugMsg *string         `json:"debug_msg"`
+	UserInfo *model.UserInfo `json:"user_info"`
+}
+
+type GetUserInfoRequest struct {
+	UserID *uint64 `json:"user_id"`
+}
+
+type GetUserInfoResponse struct {
+	UserInfo *model.UserInfo `json:"user_info"`
+}
+
+type UpdateUserInfoRequest struct {
 	UserID   *uint64 `json:"user_id"`
+	Username *string `json:"username"`
+	Bio      *string `json:"bio"`
+	Phone    *string `json:"phone"`
+	Email    *string `json:"email"`
+}
+
+type UpdateUserInfoResponse struct {
+	DebugMsg *string         `json:"debug_msg"`
+	UserInfo *model.UserInfo `json:"user_info"`
+}
+
+type CreateUserInfoRequest struct {
+	UserID   *uint64 `json:"user_id"`
+	Username *string `json:"username"`
+	Bio      *string `json:"bio"`
+	Phone    *string `json:"phone"`
+	Email    *string `json:"email"`
+}
+
+type CreateUserInfoResponse struct {
+	DebugMsg *string         `json:"debug_msg"`
+	UserInfo *model.UserInfo `json:"user_info"`
 }

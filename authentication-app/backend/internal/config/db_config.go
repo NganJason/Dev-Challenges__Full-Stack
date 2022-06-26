@@ -21,7 +21,8 @@ type Database struct {
 }
 
 type dbs struct {
-	AuthDB *sql.DB
+	AuthDB     *sql.DB
+	UserInfoDB *sql.DB
 }
 
 var (
@@ -33,18 +34,19 @@ func GetDBs() *dbs {
 }
 
 func initDBs() {
-	initAuthDB()
+	globalDBs.AuthDB = initDB(GetConfig().AuthDB)
+	globalDBs.UserInfoDB = initDB(GetConfig().AuthDB)
 }
 
-func initAuthDB() {
+func initDB(cfg *Database) *sql.DB {
 	pool, err := sql.Open(
 		"mysql",
 		fmt.Sprintf(
 			"%s:%s@tcp(localhost:%s)/%s?parseTime=true",
-			GetConfig().AuthDB.Username,
-			GetConfig().AuthDB.Password,
-			GetConfig().AuthDB.Port,
-			GetConfig().AuthDB.DBName))
+			cfg.Username,
+			cfg.Password,
+			cfg.Port,
+			cfg.DBName))
 	if err != nil {
 		log.Fatal("start db error", err.Error())
 	}
@@ -53,12 +55,12 @@ func initAuthDB() {
 		log.Fatal("reach db error", err.Error())
 	}
 
-	pool.SetMaxIdleConns(GetConfig().AuthDB.PoolMaxIdle)
-	pool.SetMaxOpenConns(GetConfig().AuthDB.PoolMaxOpen)
+	pool.SetMaxIdleConns(cfg.PoolMaxIdle)
+	pool.SetMaxOpenConns(cfg.PoolMaxOpen)
 	pool.SetConnMaxIdleTime(
-		time.Duration(GetConfig().AuthDB.MaxIdleSeconds) * time.Second)
+		time.Duration(cfg.MaxIdleSeconds) * time.Second)
 	pool.SetConnMaxLifetime(
-		time.Duration(GetConfig().AuthDB.MaxLifeSeconds) * time.Second)
+		time.Duration(cfg.MaxLifeSeconds) * time.Second)
 
-	globalDBs.AuthDB = pool
+	return pool
 }
