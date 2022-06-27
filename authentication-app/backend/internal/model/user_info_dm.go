@@ -68,6 +68,7 @@ func (dm *userInfoDM) GetUserInfo(
 		&userInfo.Bio,
 		&userInfo.Phone,
 		&userInfo.Email,
+		&userInfo.Image,
 		&userInfo.CreatedAt,
 		&userInfo.UpdatedAt,
 	)
@@ -174,6 +175,7 @@ func (dm *userInfoDM) UpdateUserInfo(
 		&existingUser.Bio,
 		&existingUser.Phone,
 		&existingUser.Email,
+		&existingUser.Image,
 		&existingUser.CreatedAt,
 		&existingUser.UpdatedAt,
 	)

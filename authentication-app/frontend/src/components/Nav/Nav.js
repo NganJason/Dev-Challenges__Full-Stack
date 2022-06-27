@@ -9,7 +9,7 @@ import DropdownModal from "./DropdownModal";
 import lightThemeLogo from "../../assets/devchallenges.svg";
 import darkThemeLogo from "../../assets/devchallenges-light.svg";
 
-function Nav({showModal, toggleModal}) {
+function Nav({showModal, toggleModal, userInfo}) {
   const { toggleIsDarkTheme, isDarkTheme } = useContext(ThemeContext);
 
   return (
@@ -22,10 +22,8 @@ function Nav({showModal, toggleModal}) {
       </Link>
 
       <div className="nav__profile">
-        <img src="https://64.media.tumblr.com/65390415cadbd069148850d7cdcbedd1/tumblr_ozgyzr929N1qjoleso1_1280.jpg" />
-
         <Text size="0.8rem" bd="700">
-          Jason Ngan
+          {userInfo["username"] ? userInfo["username"] : "New User"}
         </Text>
 
         <span className="material-icons md-36 primary" onClick={toggleModal}>

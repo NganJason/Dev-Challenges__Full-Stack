@@ -9,6 +9,7 @@ type UserInfo struct {
 	Bio       *string    `json:"bio"`
 	Phone     *string    `json:"phone"`
 	Email     *string    `json:"email"`
+	Image     *string    `json:"image"`
 	CreatedAt *time.Time `json:"created_at"`
 	UpdatedAt *time.Time `json:"updated_at"`
 }

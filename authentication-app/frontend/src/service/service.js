@@ -24,7 +24,7 @@ class Service {
             { withCredentials: true }
           )
           .then(function(resp) {
-            return resp;
+            return resp.data.user_info;
           })
           .catch(function(error) {
             throw new Error(error.response.data.debug_msg);
@@ -43,7 +43,7 @@ class Service {
         { withCredentials: true }
       )
       .then(function(resp) {
-        return resp;
+        return resp.data.user_info;
       })
       .catch(function(error) {
         throw new Error(error.response.data.debug_msg)
@@ -61,7 +61,7 @@ class Service {
         { withCredentials: true }
       )
       .then(function(resp) {
-        return resp;
+        return resp.data.user_info;
       })
       .catch(function(error) {
         throw new Error(error.response.data.debug_msg)
@@ -80,7 +80,7 @@ class Service {
         { withCredentials: true }
       )
       .then(function(resp) {
-        return resp;
+        return resp.data.user_info;
       })
       .catch(function(error) {
         throw new Error(error.response.data.debug_msg)
@@ -99,7 +99,7 @@ class Service {
         { withCredentials: true }
       )
       .then(function(resp) {
-        return resp;
+        return resp.data.user_info;
       })
       .catch(function(error) {
         throw new Error(error.response.data.debug_msg)
@@ -114,6 +114,43 @@ class Service {
         { withCredentials: true }
       ).then(function (resp) {
         return resp;
+      }).catch(function (error) {
+        throw new Error(error.response.data.debug_msg)
+      })
+    }
+
+    UpdateUserInfo(req) {
+      let url = this.baseURL + "user_info/update"
+
+      let request = {
+          user_id: req.user_id,
+          username: req.username,
+          bio: req.bio,
+          phone: req.phone,
+          email: req.email,
+        }
+
+      return axios
+        .post(url, request, { withCredentials: true })
+        .then(function (resp) {
+          return resp.data.user_info;
+        })
+        .catch(function (error) {
+          throw new Error(error.response.data.debug_msg);
+        });
+    }
+
+    GetUserInfo(userID) {
+      let url = this.baseURL + "user_info/get"
+
+      return axios.post(
+        url,
+        {
+          user_id: userID,
+        },
+        { withCredentials: true }
+      ).then(function (resp) {
+        return resp.data.user_info;
       }).catch(function (error) {
         throw new Error(error.response.data.debug_msg)
       })

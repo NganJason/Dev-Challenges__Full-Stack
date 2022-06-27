@@ -18,8 +18,9 @@ func GithubLoginProcessor(ctx context.Context, req, resp interface{}) error {
 	response := resp.(*vo.GithubLoginResponse)
 
 	userAuthDM := model.NewUserAuthDM(ctx)
+	userInfoDM := model.NewUserInfoDM(ctx)
 
-	h := handler.NewAuthHandler(ctx, userAuthDM)
+	h := handler.NewAuthHandler(ctx, userAuthDM, userInfoDM)
 	h.SetGithubService(github.NewGithubService(ctx))
 
 	userInfo, err := h.LoginGithub(request.AccessCode)

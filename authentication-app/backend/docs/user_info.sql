@@ -7,6 +7,7 @@ CREATE TABLE `auth_app_db`.`user_info_tab` (
     `bio` varchar(32) DEFAULT '',
     `phone` varchar(32) DEFAULT '',
     `email` varchar(32) DEFAULT '',
+    `image` varchar(32) DEFAULT '',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`user_id`),

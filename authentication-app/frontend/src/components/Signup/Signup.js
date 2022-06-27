@@ -13,7 +13,11 @@ import Facebook from "./Facebook";
 import { NewService } from "../../service/service";
 
 
-function Signup({isSignup, setIsAuth}) {
+function Signup({
+  isSignup, 
+  setIsAuth, 
+  setUser,
+}) {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
@@ -34,7 +38,9 @@ function Signup({isSignup, setIsAuth}) {
     if (isSignup) {
       s.DefaultSignup(username, password)
       .then(function(resp) {
+        setUser(resp);
         setIsAuth(true);
+        
         window.history.pushState({}, null, url);
         window.location.reload(true);
       })
@@ -44,7 +50,9 @@ function Signup({isSignup, setIsAuth}) {
     } else {
       s.DefaultLogin(username, password)
         .then(function (resp) {
+          setUser(resp);
           setIsAuth(true);
+          
           window.history.pushState({}, null, url);
           window.location.reload(true);
         })
@@ -143,9 +151,9 @@ function Signup({isSignup, setIsAuth}) {
       </Text>
 
       <div className="social-icons">
-        <Google setIsAuth={setIsAuth} />
-        <Facebook setIsAuth={setIsAuth} />
-        <Github setIsAuth={setIsAuth} />
+        <Google setIsAuth={setIsAuth} setUser={setUser}/>
+        <Facebook setIsAuth={setIsAuth} setUser={setUser}/>
+        <Github setIsAuth={setIsAuth} setUser={setUser}/>
       </div>
       <Text bd="400" size="0.9rem" align="center" color="secondary">
         {getFormLink()}

@@ -7,7 +7,10 @@ import googleLogo from "../../assets/Google.svg";
 const Google_Client_ID =
   "347600384407-ne3gjt0942m016ciuu08vdlnhbtn9183.apps.googleusercontent.com";
 
-function Google({setIsAuth}) {
+function Google({
+  setIsAuth,
+  setUser,
+}) {
     useEffect(() => {
       /* global google */
       google.accounts.id.initialize({
@@ -23,7 +26,8 @@ function Google({setIsAuth}) {
       let s = NewService();
 
       s.GoogleLogin(user.email, user.sub)
-        .then(function() {
+        .then(function(resp) {
+          setUser(resp);
           setIsAuth(true);
         })
         .catch(function(error){

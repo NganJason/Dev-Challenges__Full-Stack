@@ -3,7 +3,10 @@ import React, { useEffect } from "react"
 import githubLogo from "../../assets/Github.svg";
 import { NewService } from "../../service/service.js"
 
-function Github({setIsAuth}) {
+function Github({
+  setIsAuth,
+  setUser,
+}) {
     const onGithub = () => {
       let CLIENT_ID = "85de73f0c04a2f06d9d5";
       let REDIRECT_URI = "http://localhost:3001/?source=github";
@@ -36,7 +39,8 @@ function Github({setIsAuth}) {
         let s = NewService();
 
         s.GithubLogin(code)
-          .then(function() {
+          .then(function(resp) {
+            setUser(resp)
             setIsAuth(true);
           })
           .catch(function(error) {
