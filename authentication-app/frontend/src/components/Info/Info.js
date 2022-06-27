@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Text from "../Text/Text";
 import Button from "../Button/Button"
 
-function Info({userData}) {
+function Info({userInfo}) {
   let navigate = useNavigate(); 
 
   const routeChange = () => {
@@ -41,23 +41,13 @@ function Info({userData}) {
           </Button>
         </div>
 
-        <div className="board__photo">
-          <Text bd="500" size="0.9rem" color="secondary">
-            Photo
-          </Text>
-
-          <div className="field__content">
-            <img src= {userData["image"]}/>
-          </div>
-        </div>
-
         <div className="board__name">
           <Text bd="500" size="0.9rem" color="secondary">
-            Name
+            Username
           </Text>
 
           <div className="field__content">
-            <Text>{userData["name"]}</Text>
+            <Text>{userInfo["username"] ? userInfo["username"] : "NA"}</Text>
           </div>
         </div>
 
@@ -67,7 +57,7 @@ function Info({userData}) {
           </Text>
 
           <div className="field__content">
-            <Text>{userData["bio"]}</Text>
+            <Text>{userInfo["bio"] ? userInfo["bio"] : "NA"}</Text>
           </div>
         </div>
 
@@ -77,7 +67,7 @@ function Info({userData}) {
           </Text>
 
           <div className="field__content">
-            <Text>{userData["phone"]}</Text>
+            <Text>{userInfo["phone"] ? userInfo["phone"] : "NA"}</Text>
           </div>
         </div>
 
@@ -87,17 +77,7 @@ function Info({userData}) {
           </Text>
 
           <div className="field__content">
-            <Text>{userData["email"]}</Text>
-          </div>
-        </div>
-
-        <div className="board__password">
-          <Text bd="500" size="0.9rem" color="secondary">
-            Password
-          </Text>
-
-          <div className="field__content">
-            <Text>{userData["password"]}</Text>
+            <Text>{userInfo["email"] ? userInfo["email"] : "NA"}</Text>
           </div>
         </div>
       </div>

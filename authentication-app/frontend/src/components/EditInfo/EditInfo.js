@@ -1,33 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Text from "../Text/Text";
 import Button from "../Button/Button"
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-function EditInfo({userData, setUserData}) {
-  const [clonedData, setClonedData] = useState({...userData})
-  let navigate = useNavigate();
+function EditInfo({
+  userInfo, 
+  updateUserInfo,
+  fetchLatestUserInfo,
+}) {
+  const [userInfoInput, setUserInfoInput] = useState({...userInfo})
+
+  useEffect(() => {
+    fetchLatestUserInfo(userInfo.user_id)
+  }, [])
 
   const onInputChange = (e) => {
     let id = e.target.id
 
-    if (!(id in clonedData)) {
+    if (!(id in userInfoInput)) {
       return
     }
 
-    let newData = {...clonedData}
+    let newData = {...userInfoInput}
     newData[id] = e.target.value
-    setClonedData(newData)
+    setUserInfoInput(newData)
   }
 
   const onFormSubmit = () => {
-    setUserData(clonedData)
+    updateUserInfo(userInfoInput);
     routeChange()
   }
 
   const routeChange = () => {
-    let path = "/";
-    navigate(path);
+    const url = "http://localhost:3001";
+    window.history.pushState({}, null, url);
+    window.location.reload(true);
   };
 
   return (
@@ -48,16 +56,14 @@ function EditInfo({userData, setUserData}) {
         </section>
 
         <div className="edit__content">
-          <img src={clonedData["image"]} />
-
           <Text size="0.8rem" bd="500" tertiary>
-            Name
+            Username
           </Text>
           <input
-            id="name"
+            id="username"
             placeholder="Enter your name..."
             type="text"
-            value={clonedData["name"]}
+            value={userInfoInput["username"]}
             onChange={onInputChange}
           />
 
@@ -68,7 +74,7 @@ function EditInfo({userData, setUserData}) {
             id="bio"
             placeholder="Enter your bio..."
             type="text"
-            value={clonedData["bio"]}
+            value={userInfoInput["bio"]}
             onChange={onInputChange}
           />
 
@@ -79,7 +85,7 @@ function EditInfo({userData, setUserData}) {
             id="phone"
             placeholder="Enter your phone..."
             type="text"
-            value={clonedData["phone"]}
+            value={userInfoInput["phone"]}
             onChange={onInputChange}
           />
 
@@ -90,18 +96,7 @@ function EditInfo({userData, setUserData}) {
             id="email"
             placeholder="Enter your email..."
             type="text"
-            value={clonedData["email"]}
-            onChange={onInputChange}
-          />
-
-          <Text size="0.8rem" bd="500" tertiary>
-            Password
-          </Text>
-          <input
-            id="password"
-            placeholder="Enter your password..."
-            type="text"
-            value={clonedData["password"]}
+            value={userInfoInput["email"]}
             onChange={onInputChange}
           />
 

@@ -9,14 +9,14 @@ import EditInfo from "./components/EditInfo/EditInfo";
 import Info from "./components/Info/Info";
 
 import "./styles/main.scss"
-import { useUserData } from "./hooks/useUserData";
+import { useUserInfo } from "./hooks/useUserInfo";
 import ProtectedRoute from "./components/CustomRoute/ProtectedRoute";
 import AuthRoute from "./components/CustomRoute/AuthRoute";
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
   const { isDarkTheme } = useContext(ThemeContext);
-  const { userData, editUserData } = useUserData();
+  const { userInfo, setUser, updateUserInfo, fetchLatestUserInfo } = useUserInfo();
   
   useEffect(() => {
     let s = NewService();
@@ -37,23 +37,23 @@ function App() {
           <Route path="/auth" element={<AuthRoute isAuth={isAuth} />}>
             <Route
               path="signup"
-              element={<Signup isSignup={true} setIsAuth={setIsAuth} />}
+              element={<Signup isSignup={true} setIsAuth={setIsAuth} setUser={setUser}/>}
             />
             <Route
               path="login"
-              element={<Signup isSignup={false} setIsAuth={setIsAuth} />}
+              element={<Signup isSignup={false} setIsAuth={setIsAuth} setUser={setUser}/>}
             />
           </Route>
 
           <Route
-            element={<ProtectedRoute isAuth={isAuth} setIsAuth={setIsAuth} />}
+            element={<ProtectedRoute isAuth={isAuth} setIsAuth={setIsAuth} setUser={setUser}/>}
           >
-            <Route path="/" exact element={<Home />}>
-              <Route exact path="" element={<Info userData={userData} />} />
+            <Route path="/" exact element={<Home userInfo={userInfo} fetchLatestUserInfo={fetchLatestUserInfo}/>}>
+              <Route exact path="" element={<Info userInfo={userInfo} />} />
               <Route
                 path="edit-info"
                 element={
-                  <EditInfo userData={userData} setUserData={editUserData} />
+                  <EditInfo userInfo={userInfo} updateUserInfo={updateUserInfo} fetchLatestUserInfo={fetchLatestUserInfo}/>
                 }
               />
             </Route>

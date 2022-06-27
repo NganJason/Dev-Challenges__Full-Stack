@@ -21,7 +21,9 @@ func GoogleLoginProcessor(ctx context.Context, req, resp interface{}) error {
 	}
 
 	userAuthDM := model.NewUserAuthDM(ctx)
-	h := handler.NewAuthHandler(ctx, userAuthDM)
+	userInfoDM := model.NewUserInfoDM(ctx)
+
+	h := handler.NewAuthHandler(ctx, userAuthDM, userInfoDM)
 
 	userInfo, err := h.LoginGoogle(request.SubID)
 	if err != nil {
@@ -34,6 +36,5 @@ func GoogleLoginProcessor(ctx context.Context, req, resp interface{}) error {
 	}
 
 	response.UserInfo = userInfo
-
 	return nil
 }

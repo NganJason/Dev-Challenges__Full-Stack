@@ -24,10 +24,15 @@ type authHandler struct {
 	userInfoDM model.UserInfoInterface
 }
 
-func NewAuthHandler(ctx context.Context, authDM model.UserAuthInterface) *authHandler {
+func NewAuthHandler(
+	ctx context.Context,
+	authDM model.UserAuthInterface,
+	userInfoDM model.UserInfoInterface,
+) *authHandler {
 	return &authHandler{
-		ctx:    ctx,
-		authDM: authDM,
+		ctx:        ctx,
+		authDM:     authDM,
+		userInfoDM: userInfoDM,
 	}
 }
 

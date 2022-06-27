@@ -45,8 +45,10 @@ func CheckAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		userID := auth.Value
-		authDM := model.NewUserAuthDM(r.Context())
-		h := handler.NewAuthHandler(r.Context(), authDM)
+		userAuthDM := model.NewUserAuthDM(r.Context())
+		userInfoDM := model.NewUserInfoDM(r.Context())
+
+		h := handler.NewAuthHandler(r.Context(), userAuthDM, userInfoDM)
 
 		isAuth, err := h.ValidateUser(&userID)
 		if err != nil {

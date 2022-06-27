@@ -50,8 +50,10 @@ func (p *loginProcessor) process() error {
 		return err
 	}
 
-	authDM := model.NewUserAuthDM(p.ctx)
-	h := handler.NewAuthHandler(p.ctx, authDM)
+	userAuthDM := model.NewUserAuthDM(p.ctx)
+	userInfoDM := model.NewUserInfoDM(p.ctx)
+
+	h := handler.NewAuthHandler(p.ctx, userAuthDM, userInfoDM)
 
 	userInfo, err := h.DefaultLogin(p.req.Username, p.req.Password)
 	if err != nil {

@@ -4,7 +4,10 @@ import facebookLogo from "../../assets/Facebook.svg";
 
 import { NewService } from "../../service/service.js";
 
-function Facebook({setIsAuth}) {
+function Facebook({
+  setIsAuth,
+  setUser,
+}) {
     const responseHandler = (r) => {
       const source =
         window.location.href.match(/\?state=(.*)/) &&
@@ -24,7 +27,8 @@ function Facebook({setIsAuth}) {
 
       let s = NewService();
       s.FacebookLogin(r.accessToken)
-        .then(function() {
+        .then(function(resp) {
+          setUser(resp);
           setIsAuth(true);
         })
         .catch(function(error) {

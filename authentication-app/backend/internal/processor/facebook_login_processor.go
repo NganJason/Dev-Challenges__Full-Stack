@@ -22,8 +22,9 @@ func FacebookLoginProcessor(ctx context.Context, req, resp interface{}) error {
 	}
 
 	userAuthDM := model.NewUserAuthDM(ctx)
+	userInfoDM := model.NewUserInfoDM(ctx)
 
-	h := handler.NewAuthHandler(ctx, userAuthDM)
+	h := handler.NewAuthHandler(ctx, userAuthDM, userInfoDM)
 	h.SetFacebookService(facebook.NewFacebookService(ctx))
 
 	userInfo, err := h.LoginFacebook(request.AccessCode)

@@ -1,27 +1,73 @@
-import {userData} from "../data/data"
+import { defaultUserInfo } from "../data/data";
+import { localStorageDM } from "../dm/localStorageDM";
+import { NewService } from "../service/service";
 
-export const initUserDataHandler = () => {
+export const initUserInfoHandler = () => {
     console.log("init new handler")
-    let userDataHandler = new UserData();
+    let dm = new localStorageDM("user_info")
+    let service = NewService()
+    let userInfoHandler = new UserInfo(dm, service);
 
-    return userDataHandler
+    return userInfoHandler;
 }
 
-class UserData {
-    constructor() {
-        this.userData = this.getDefaultUserData()
+class UserInfo {
+  constructor(dm, userService) {
+    this.dm = dm;
+    this.service = userService;
+    this.userInfo = this.getDefaultUserInfo();
+  }
+
+  getUserInfo() {
+    return this.userInfo;
+  }
+
+  setUserInfo(d) {
+    this.userInfo = d;
+
+    this.dm.save(d);
+    return this.userInfo;
+  }
+
+  updateUserInfo(d) {
+    let closure = this 
+
+    this.service
+      .UpdateUserInfo(d)
+      .then(function () {
+        closure.setUserInfo(d);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    return this.userInfo;
+  }
+
+  fetchLatestUserInfo(userID) {
+    if (userID === null || userID === undefined) {
+      return this.userInfo;
     }
 
-    getUserData() {
-        return this.userData
+    let closure = this
+    this.service
+      .GetUserInfo(userID)
+      .then(function (resp) {
+        closure.setUserInfo(resp);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+
+    return this.userInfo;
+  }
+
+  getDefaultUserInfo() {
+    let userInfo = this.dm.get();
+    if (userInfo === undefined) {
+      return defaultUserInfo;
     }
 
-    setUserData(d) {
-        this.userData = d
-        return this.userData
-    }
-
-    getDefaultUserData() {
-        return userData
-    }
+    return userInfo;
+  }
 }
