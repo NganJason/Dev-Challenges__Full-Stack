@@ -29,6 +29,12 @@ func GetAllProcessors() []ProcessorConfig {
 			Resp:      &vo.SignupResponse{},
 		},
 		{
+			Path:      "/api/logout",
+			Processor: LogoutProcessor,
+			Req:       &vo.LogoutRequest{},
+			Resp:      &vo.LogoutResponse{},
+		},
+		{
 			Path:      "/api/login/github",
 			Processor: GithubLoginProcessor,
 			Req:       &vo.GithubLoginRequest{},

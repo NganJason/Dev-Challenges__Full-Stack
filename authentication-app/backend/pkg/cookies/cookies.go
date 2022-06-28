@@ -88,6 +88,19 @@ func CreateCookie(value string, options ...cookieOption) *http.Cookie {
 	return cookie
 }
 
+func DeleteCookie() *http.Cookie {
+	c := &http.Cookie{
+		Name:     string(GetCookieKey()),
+		Value:    "",
+		Path:     "/",
+		MaxAge:   0,
+		HttpOnly: true,
+		Secure:   true,
+	}
+
+	return c
+}
+
 func WithName(name string) cookieOption {
 	return func(c *http.Cookie) {
 		c.Name = name

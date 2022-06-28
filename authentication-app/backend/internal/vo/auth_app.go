@@ -98,3 +98,9 @@ type CreateUserInfoResponse struct {
 	DebugMsg *string         `json:"debug_msg"`
 	UserInfo *model.UserInfo `json:"user_info"`
 }
+
+type LogoutRequest struct{}
+
+type LogoutResponse struct {
+	DebugMsg *string `json:"debug_msg"`
+}
