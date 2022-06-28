@@ -1,12 +1,25 @@
 import React from "react"
 import { Link } from "react-router-dom";
+import { NewService } from "../../service/service";
 
 import Text from "../Text/Text";
 
-function DropdownModal({show}) {
+function DropdownModal({show, toggleModal}) {
    const stopPropagation = (e) => {
      e.stopPropagation();
    };
+
+   const logout = () => {
+    toggleModal();
+
+    let s = NewService()
+    window.localStorage.clear();
+    s.Logout()
+
+    const url = "http://localhost:3001/auth/login";
+    window.history.pushState({}, null, url);
+    window.location.reload(true);
+   }
 
     return (
       <div
@@ -31,7 +44,7 @@ function DropdownModal({show}) {
           </Text>
         </div>
 
-        <div className="bg-hover">
+        <div className="bg-hover" onClick={logout}>
           <span className="material-icons inline md-24 tertiary">logout</span>
           <Text size="0.8rem" color="alert">
             Logout

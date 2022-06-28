@@ -14,7 +14,7 @@ function Nav({showModal, toggleModal, userInfo}) {
 
   return (
     <div className="nav">
-      <Link to="/" style={{width: "auto"}}>
+      <Link to="/" style={{ width: "auto" }}>
         <img
           className="nav__logo"
           src={isDarkTheme ? darkThemeLogo : lightThemeLogo}
@@ -30,7 +30,7 @@ function Nav({showModal, toggleModal, userInfo}) {
           arrow_drop_down
         </span>
 
-        <DropdownModal show={showModal} />
+        <DropdownModal toggleModal={toggleModal} show={showModal} />
 
         <Button
           onClick={toggleIsDarkTheme}

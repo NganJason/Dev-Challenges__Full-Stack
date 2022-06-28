@@ -155,4 +155,18 @@ class Service {
         throw new Error(error.response.data.debug_msg)
       })
     }
+
+    Logout() {
+      let url = this.baseURL + "logout"
+
+      return axios.post(
+        url,
+        {},
+        { withCredentials: true }
+        ).then(function (resp) {
+          return resp
+        }).catch(function (error) {
+          throw new Error(error.response.data.debug_msg)
+        })
+    }
 }
