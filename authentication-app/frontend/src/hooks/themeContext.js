@@ -1,12 +1,15 @@
 import React, { useState } from "react"
+import { initThemeHandler } from "../handlers/themeHandler"
 
 export const ThemeContext = React.createContext()
 
+const h = initThemeHandler()
+
 export function ThemeProvider({children}) {
-    const [isDarkTheme, setIsDarkTheme] = useState(false)
+    const [isDarkTheme, setIsDarkTheme] = useState(h.getIsDarkTheme())
 
     const toggleIsDarkTheme = () => {
-        setIsDarkTheme(!isDarkTheme)
+        setIsDarkTheme(h.setIsDarkTheme(!isDarkTheme))
     }
 
     const value = {toggleIsDarkTheme, isDarkTheme};

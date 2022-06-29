@@ -7,6 +7,7 @@ import { NewService } from "../../service/service.js";
 function Facebook({
   setIsAuth,
   setUser,
+  setErrorAlert,
 }) {
     const responseHandler = (r) => {
       const source =
@@ -31,8 +32,9 @@ function Facebook({
           setUser(resp);
           setIsAuth(true);
         })
-        .catch(function(error) {
-          console.log(error.message);
+        .catch(function(err) {
+          console.log(err);
+          setErrorAlert(err);
         })
     }
 

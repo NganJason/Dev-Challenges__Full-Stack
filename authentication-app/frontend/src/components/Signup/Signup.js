@@ -21,6 +21,9 @@ function Signup({
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
+  const [errorLog, setErrorLog] = useState("error")
+  const [showError, setShowError] = useState(false)
+
   const { isDarkTheme } = useContext(ThemeContext);
 
   const onUsernameChange = (e) => {
@@ -46,6 +49,7 @@ function Signup({
       })
       .catch(function(err) { 
         console.log(err)
+        setErrorAlert(err);
       })
     } else {
       s.DefaultLogin(username, password)
@@ -57,7 +61,8 @@ function Signup({
           window.location.reload(true);
         })
         .catch(function (err) {
-          console.log(err);
+          console.log(err)
+          setErrorAlert(err)
         });
     }
 
@@ -67,6 +72,21 @@ function Signup({
   const clearFields = () => {
     setUsername("")
     setPassword("")
+  }
+
+  const setErrorAlert = (err) => {
+    if (err.response.status !== 401 && err.response.status !== 400) {
+      return
+    }
+
+    let msg = err.response.data.debug_msg;
+    msg = msg[0].toUpperCase() + msg.substring(1)
+    setErrorLog(msg);
+    setShowError(true);
+
+    setInterval(() => {
+      setShowError(false)
+    }, 4000)
   }
 
   const getFormTitle = () => {
@@ -121,6 +141,9 @@ function Signup({
 
       {getFormTitle()}
 
+      <div className={"msg " + (showError ? "alert-shown" : "alert-hidden")}>
+        {errorLog}
+      </div>
       <input
         type="text"
         placeholder="Email"
@@ -151,9 +174,21 @@ function Signup({
       </Text>
 
       <div className="social-icons">
-        <Google setIsAuth={setIsAuth} setUser={setUser}/>
-        <Facebook setIsAuth={setIsAuth} setUser={setUser}/>
-        <Github setIsAuth={setIsAuth} setUser={setUser}/>
+        <Google
+          setIsAuth={setIsAuth}
+          setUser={setUser}
+          setErrorAlert={setErrorAlert}
+        />
+        <Facebook
+          setIsAuth={setIsAuth}
+          setUser={setUser}
+          setErrorAlert={setErrorAlert}
+        />
+        <Github
+          setIsAuth={setIsAuth}
+          setUser={setUser}
+          setErrorAlert={setErrorAlert}
+        />
       </div>
       <Text bd="400" size="0.9rem" align="center" color="secondary">
         {getFormLink()}

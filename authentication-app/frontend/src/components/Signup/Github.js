@@ -6,6 +6,7 @@ import { NewService } from "../../service/service.js"
 function Github({
   setIsAuth,
   setUser,
+  setErrorAlert,
 }) {
     const onGithub = () => {
       let CLIENT_ID = "85de73f0c04a2f06d9d5";
@@ -43,8 +44,9 @@ function Github({
             setUser(resp)
             setIsAuth(true);
           })
-          .catch(function(error) {
-            console.log(error.message);
+          .catch(function(err) {
+            console.log(err);
+            setErrorAlert(err);
           });
     }, [])
 
