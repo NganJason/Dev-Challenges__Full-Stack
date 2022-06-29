@@ -27,7 +27,7 @@ class Service {
             return resp.data.user_info;
           })
           .catch(function(error) {
-            throw new Error(error.response.data.debug_msg);
+            throw error;
           }); 
     }
 
@@ -46,7 +46,7 @@ class Service {
         return resp.data.user_info;
       })
       .catch(function(error) {
-        throw new Error(error.response.data.debug_msg)
+        throw error;
       });
     }
 
@@ -64,7 +64,7 @@ class Service {
         return resp.data.user_info;
       })
       .catch(function(error) {
-        throw new Error(error.response.data.debug_msg)
+        throw error;
       })
     }
 
@@ -83,7 +83,7 @@ class Service {
         return resp.data.user_info;
       })
       .catch(function(error) {
-        throw new Error(error.response.data.debug_msg)
+        throw error;
       })
     }
 
@@ -102,7 +102,7 @@ class Service {
         return resp.data.user_info;
       })
       .catch(function(error) {
-        throw new Error(error.response.data.debug_msg)
+        throw error
       })
     }
     
@@ -115,7 +115,7 @@ class Service {
       ).then(function (resp) {
         return resp;
       }).catch(function (error) {
-        throw new Error(error.response.data.debug_msg)
+        throw error;
       })
     }
 
@@ -136,7 +136,7 @@ class Service {
           return resp.data.user_info;
         })
         .catch(function (error) {
-          throw new Error(error.response.data.debug_msg);
+          throw error;
         });
     }
 
@@ -152,7 +152,7 @@ class Service {
       ).then(function (resp) {
         return resp.data.user_info;
       }).catch(function (error) {
-        throw new Error(error.response.data.debug_msg)
+        throw error;
       })
     }
 
@@ -166,7 +166,7 @@ class Service {
         ).then(function (resp) {
           return resp
         }).catch(function (error) {
-          throw new Error(error.response.data.debug_msg)
+          throw error;
         })
     }
 }

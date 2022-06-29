@@ -10,6 +10,7 @@ const Google_Client_ID =
 function Google({
   setIsAuth,
   setUser,
+  setErrorAlert,
 }) {
     useEffect(() => {
       /* global google */
@@ -30,8 +31,9 @@ function Google({
           setUser(resp);
           setIsAuth(true);
         })
-        .catch(function(error){
-          console.log(error.message)
+        .catch(function(err){
+          console.log(err)
+          setErrorAlert(err);
         })
     };
 

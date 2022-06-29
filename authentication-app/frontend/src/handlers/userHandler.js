@@ -3,7 +3,6 @@ import { localStorageDM } from "../dm/localStorageDM";
 import { NewService } from "../service/service";
 
 export const initUserInfoHandler = () => {
-    console.log("init new handler")
     let dm = new localStorageDM("user_info")
     let service = NewService()
     let userInfoHandler = new UserInfo(dm, service);
