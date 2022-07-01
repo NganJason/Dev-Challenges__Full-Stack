@@ -40,19 +40,18 @@ func main() {
 	)
 	handler := c.Handler(mux)
 
-	clog.Info(ctx, "Listening to port 8082")
+	clog.Info(ctx, fmt.Sprintf("Listening to port %s", GetPort()))
 	err := http.ListenAndServe(GetPort(), handler)
 	if err != nil {
 		clog.Fatal(ctx, fmt.Sprintf("error init server, %s", err.Error()))
 	}
 }
 
- func GetPort() string {
-var port = os.Getenv("PORT")
+func GetPort() string {
+	var port = os.Getenv("PORT")
 
 	if port == "" {
 		port = "8082"
-		fmt.Println("INFO: No PORT environment variable detected, defaulting to " + port)
 	}
 
 	return ":" + port

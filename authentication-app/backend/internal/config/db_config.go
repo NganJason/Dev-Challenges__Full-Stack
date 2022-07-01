@@ -12,6 +12,7 @@ import (
 type Database struct {
 	Username       string `json:"db_username"`
 	Password       string `json:"db_password"`
+	Host		   string `json:"host"`
 	Port           string `json:"db_port"`
 	DBName         string `json:"db_name"`
 	PoolMaxOpen    int    `json:"pool_max_open"`
@@ -42,10 +43,10 @@ func initDB(cfg *Database) *sql.DB {
 	pool, err := sql.Open(
 		"mysql",
 		fmt.Sprintf(
-			"%s:%s@tcp(localhost:%s)/%s?parseTime=true",
+			"%s:%s@(%s)/%s?parseTime=true",
 			cfg.Username,
 			cfg.Password,
-			cfg.Port,
+			cfg.Host,
 			cfg.DBName))
 	if err != nil {
 		log.Fatal("start db error", err.Error())

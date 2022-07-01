@@ -2,9 +2,8 @@ package config
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"os"
+	"strings"
 
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/pkg/clog"
 )
@@ -26,20 +25,29 @@ func GetConfig() *Config {
 }
 
 func InitConfig() {
-	configFile, _ := os.Open(configFilePath)
-	defer configFile.Close()
+	GlobalConfig = new(Config)
+	initDBConfig()
+	initDBs()
+}
 
-	decoder := json.NewDecoder(configFile)
-
-	var configuration Config
-	err := decoder.Decode(&configuration)
-	if err != nil {
+func initDBConfig() {
+	DBUrl := os.Getenv("DATABASE_URL")
+	if DBUrl == "" {
 		clog.Fatal(
 			context.Background(),
-			fmt.Sprintf("failed to load configs err=% s", err.Error()),
+			"cannot get DATABASE_URL from env var",
 		)
 	}
+	split := strings.Split(DBUrl, ":")
+	dbUsername := split[0]
+	dbPassword := split[1]
+	dbHost := split[2]
+	dbName := split[3]
 
-	GlobalConfig = &configuration
-	initDBs()
+	GlobalConfig.AuthDB = &Database{
+		Username: dbUsername,
+		Password: dbPassword,
+		DBName: dbName,
+		Host: dbHost,
+	}
 }
