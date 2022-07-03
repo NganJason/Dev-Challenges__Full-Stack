@@ -16,13 +16,9 @@ function Github({
     };
 
     useEffect(() => {
-        const source =
-          window.location.href.match(/\?source=(.*)/) &&
-          window.location.href.match(/\?source=(.*)/)[1];
+        const source = window.location.href.match(/\?source=(.*)/) && window.location.href.match(/\?source=(.*)/)[1];
 
-        const code =
-          window.location.href.match(/\&code=(.*)/) &&
-          window.location.href.match(/\&code=(.*)/)[1];
+        const code = window.location.href.match(/\&code=(.*)/) && window.location.href.match(/\&code=(.*)/)[1];
 
         let isSourceGithub = false
         if (source !== null) {
@@ -48,7 +44,7 @@ function Github({
             console.log(err);
             setErrorAlert(err);
           });
-    }, [])
+    }, [setErrorAlert, setIsAuth, setUser])
 
     return <img src={githubLogo} alt="github-icon" onClick={onGithub} />;
 }

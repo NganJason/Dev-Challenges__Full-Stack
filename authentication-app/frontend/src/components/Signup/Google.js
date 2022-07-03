@@ -19,7 +19,7 @@ function Google({
         callback: handleCallbackResponse,
         ux_mode: "redirect",
       });
-    }, []);
+    }, [handleCallbackResponse]);
 
     const handleCallbackResponse = (resp) => {
       let user = jwt_decode(resp.credential);
