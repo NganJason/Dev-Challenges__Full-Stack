@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 function AuthRoute({ isAuth, children }) {
   useEffect(() => {
     if (isAuth) {
-        const url = "http://localhost:3001";
+        const url = "/";
         window.history.pushState({}, null, url);
         window.location.reload(true);
     }

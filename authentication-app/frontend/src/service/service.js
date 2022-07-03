@@ -1,9 +1,8 @@
 import axios from "axios"
 
 export const NewService = () => {
-    let baseURL = "http://localhost:8082/api/"
+    let baseURL = process.env.REACT_APP_BACKEND_API;
     let s = new Service(baseURL)
-    
     return s
 }
 
@@ -27,6 +26,7 @@ class Service {
             return resp.data.user_info;
           })
           .catch(function(error) {
+            console.log(error);
             throw error;
           }); 
     }

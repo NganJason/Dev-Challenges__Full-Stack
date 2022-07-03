@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/config"
 	"github.com/NganJason/Dev-Challenges__Full-Stack/auth-app/internal/processor"
@@ -39,9 +40,19 @@ func main() {
 	)
 	handler := c.Handler(mux)
 
-	clog.Info(ctx, "Listening to port 8082")
-	err := http.ListenAndServe(":8082", handler)
+	clog.Info(ctx, fmt.Sprintf("Listening to port %s", GetPort()))
+	err := http.ListenAndServe(GetPort(), handler)
 	if err != nil {
 		clog.Fatal(ctx, fmt.Sprintf("error init server, %s", err.Error()))
 	}
+}
+
+func GetPort() string {
+	var port = os.Getenv("PORT")
+
+	if port == "" {
+		port = "8082"
+	}
+
+	return ":" + port
 }
