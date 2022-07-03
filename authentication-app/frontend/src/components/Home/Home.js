@@ -9,7 +9,7 @@ function Home({userInfo, fetchLatestUserInfo}) {
 
   useEffect(() => {
     fetchLatestUserInfo(userInfo.user_id)
-  }, [])
+  }, [fetchLatestUserInfo, userInfo.user_id])
 
   const toggleModal = () => {
     setShowModal(!showModal);

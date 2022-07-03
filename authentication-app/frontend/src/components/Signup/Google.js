@@ -13,6 +13,22 @@ function Google({
   setErrorAlert,
 }) {
     useEffect(() => {
+      const handleCallbackResponse = (resp) => {
+        let user = jwt_decode(resp.credential);
+
+        let s = NewService();
+
+        s.GoogleLogin(user.email, user.sub)
+          .then(function (resp) {
+            setUser(resp);
+            setIsAuth(true);
+          })
+          .catch(function (err) {
+            console.log(err);
+            setErrorAlert(err);
+          });
+      };
+      
       /* global google */
       google.accounts.id.initialize({
         client_id: Google_Client_ID,
@@ -20,22 +36,6 @@ function Google({
         ux_mode: "redirect",
       });
     }, [handleCallbackResponse]);
-
-    const handleCallbackResponse = (resp) => {
-      let user = jwt_decode(resp.credential);
-
-      let s = NewService();
-
-      s.GoogleLogin(user.email, user.sub)
-        .then(function(resp) {
-          setUser(resp);
-          setIsAuth(true);
-        })
-        .catch(function(err){
-          console.log(err)
-          setErrorAlert(err);
-        })
-    };
 
     return (
       <img
