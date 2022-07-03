@@ -13,7 +13,7 @@ function EditInfo({
 
   useEffect(() => {
     fetchLatestUserInfo(userInfo.user_id);
-  }, [fetchLatestUserInfo, userInfo.user_id]);
+  }, []);
 
   const onInputChange = (e) => {
     let id = e.target.id
