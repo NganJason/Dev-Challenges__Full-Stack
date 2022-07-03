@@ -10,8 +10,12 @@ export const useUserInfo = () => {
         setUserInfo({ ...userInfoHandler.setUserInfo(d) });
     }
 
-    const updateUserInfo = (d) => {
-        setUserInfo({ ...userInfoHandler.updateUserInfo(d) });
+    const updateUserInfo = async (d) => {
+        return userInfoHandler.updateUserInfo(d).then((res) => {
+            setUserInfo({...res})
+        }).catch((err) => {
+            throw err
+        })        
     }
 
     const fetchLatestUserInfo = (userID) => {

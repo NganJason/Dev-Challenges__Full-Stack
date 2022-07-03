@@ -28,19 +28,18 @@ class UserInfo {
     return this.userInfo;
   }
 
-  updateUserInfo(d) {
+  async updateUserInfo(d) {
     let closure = this 
 
-    this.service
+    return this.service
       .UpdateUserInfo(d)
       .then(function () {
-        closure.setUserInfo(d);
+        let userInfo = closure.setUserInfo(d);
+        return userInfo
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch(function (err) {
+        throw err;
       });
-
-    return this.userInfo;
   }
 
   fetchLatestUserInfo(userID) {

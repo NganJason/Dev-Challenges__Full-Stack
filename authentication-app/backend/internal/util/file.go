@@ -2,8 +2,6 @@ package util
 
 import (
 	"os"
-
-	"github.com/joho/godotenv"
 )
 
 const (
@@ -11,10 +9,5 @@ const (
 )
 
 func GetDotEnvVariable(key string) (string, error) {
-	err := godotenv.Load(envFilePath)
-	if err != nil {
-		return "", err
-	}
-
 	return os.Getenv(key), nil
 }

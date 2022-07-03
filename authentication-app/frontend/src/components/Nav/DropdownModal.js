@@ -14,11 +14,15 @@ function DropdownModal({show, toggleModal}) {
 
     let s = NewService()
     window.localStorage.clear();
-    s.Logout()
+    s.Logout().then(() => {
+      const url = window.location.origin + "/auth/login";
+      window.history.pushState({}, null, url);
+      window.location.reload(true);
+    }).catch((err) => {
+      console.log(err)
+    })
 
-    const url = "http://localhost:3001/auth/login";
-    window.history.pushState({}, null, url);
-    window.location.reload(true);
+    
    }
 
     return (

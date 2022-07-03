@@ -10,7 +10,7 @@ function Github({
 }) {
     const onGithub = () => {
       let CLIENT_ID = "85de73f0c04a2f06d9d5";
-      let REDIRECT_URI = "http://localhost:3001/?source=github";
+      let REDIRECT_URI = window.location.href + "?source=github";
       let url = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user&redirect_uri=${REDIRECT_URI}`;
       window.location.href = url;
     };

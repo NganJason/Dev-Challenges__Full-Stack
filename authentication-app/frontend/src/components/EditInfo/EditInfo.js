@@ -28,12 +28,16 @@ function EditInfo({
   }
 
   const onFormSubmit = () => {
-    updateUserInfo(userInfoInput);
-    routeChange()
+    updateUserInfo(userInfoInput).then(() => {
+      routeChange();
+    }).catch((err) => {
+      console.log(err)
+    });
+    
   }
 
   const routeChange = () => {
-    const url = "http://localhost:3001";
+    const url = "/";
     window.history.pushState({}, null, url);
     window.location.reload(true);
   };

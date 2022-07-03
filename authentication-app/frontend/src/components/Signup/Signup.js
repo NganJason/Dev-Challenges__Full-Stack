@@ -36,7 +36,7 @@ function Signup({
 
   const onSubmit = () => {
     let s = NewService()
-    const url = "http://localhost:3001";
+    const url = "/";
 
     if (isSignup) {
       s.DefaultSignup(username, password)
@@ -118,14 +118,14 @@ function Signup({
     if (isSignup) {
       return (
         <div>
-          Already a member? <a href="http://localhost:3001/auth/login">Login</a>
+          Already a member? <a href="/auth/login">Login</a>
         </div>
       )
     } else {
       return (
         <div>
           Don't have an account yet?{" "}
-          <a href="http://localhost:3001/auth/signup">Register</a>
+          <a href="/auth/signup">Register</a>
         </div>
       ); 
     }
