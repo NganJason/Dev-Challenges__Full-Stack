@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import jwt_decode from "jwt-decode";
 import { NewService } from "../../service/service.js";
 
@@ -12,23 +12,24 @@ function Google({
   setUser,
   setErrorAlert,
 }) {
+  const handleCallbackResponse = useCallback((resp) => {
+    let user = jwt_decode(resp.credential);
+
+    let s = NewService();
+
+    s.GoogleLogin(user.email, user.sub)
+      .then(function (resp) {
+        setUser(resp);
+        setIsAuth(true);
+      })
+      .catch(function (err) {
+        console.log(err);
+        setErrorAlert(err);
+      });
+  }, []);
+
+
     useEffect(() => {
-      const handleCallbackResponse = (resp) => {
-        let user = jwt_decode(resp.credential);
-
-        let s = NewService();
-
-        s.GoogleLogin(user.email, user.sub)
-          .then(function (resp) {
-            setUser(resp);
-            setIsAuth(true);
-          })
-          .catch(function (err) {
-            console.log(err);
-            setErrorAlert(err);
-          });
-      };
-      
       /* global google */
       google.accounts.id.initialize({
         client_id: Google_Client_ID,
