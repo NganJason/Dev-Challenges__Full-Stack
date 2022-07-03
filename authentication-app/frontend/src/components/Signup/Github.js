@@ -16,34 +16,40 @@ function Github({
     };
 
     useEffect(() => {
-        const source = window.location.href.match(/\?source=(.*)/) && window.location.href.match(/\?source=(.*)/)[1];
+      //eslint-disable-next-line
+      const source =
+        window.location.href.match(/\?source=(.*)/) &&
+        window.location.href.match(/\?source=(.*)/)[1];
 
-        const code = window.location.href.match(/\&code=(.*)/) && window.location.href.match(/\&code=(.*)/)[1];
+      //eslint-disable-next-line
+      const code =
+        window.location.href.match(/\&code=(.*)/) &&
+        window.location.href.match(/\&code=(.*)/)[1];
 
-        let isSourceGithub = false
-        if (source !== null) {
-          isSourceGithub = source.includes("github");
-        }
+      let isSourceGithub = false;
+      if (source !== null) {
+        isSourceGithub = source.includes("github");
+      }
 
-        if (code === "" || code === null || !isSourceGithub) {
-            return
-        }
+      if (code === "" || code === null || !isSourceGithub) {
+        return;
+      }
 
-        const url = window.location.href;
-        const newUrl = url.split("?source=");
-        window.history.pushState({}, null, newUrl[0]);
+      const url = window.location.href;
+      const newUrl = url.split("?source=");
+      window.history.pushState({}, null, newUrl[0]);
 
-        let s = NewService();
+      let s = NewService();
 
-        s.GithubLogin(code)
-          .then(function(resp) {
-            setUser(resp)
-            setIsAuth(true);
-          })
-          .catch(function(err) {
-            console.log(err);
-            setErrorAlert(err);
-          });
+      s.GithubLogin(code)
+        .then(function (resp) {
+          setUser(resp);
+          setIsAuth(true);
+        })
+        .catch(function (err) {
+          console.log(err);
+          setErrorAlert(err);
+        });
     }, [setErrorAlert, setIsAuth, setUser])
 
     return <img src={githubLogo} alt="github-icon" onClick={onGithub} />;
