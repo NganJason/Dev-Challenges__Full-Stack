@@ -5,6 +5,7 @@ import Button from "../Button/Button"
 import { Link } from "react-router-dom";
 
 function EditInfo({
+  setLoading,
   userInfo, 
   updateUserInfo,
   fetchLatestUserInfo,
@@ -28,12 +29,15 @@ function EditInfo({
   }
 
   const onFormSubmit = () => {
+    setLoading(true)
+
     updateUserInfo(userInfoInput).then(() => {
       routeChange();
     }).catch((err) => {
       console.log(err)
+    }).finally(function() {
+      setLoading(false)
     });
-    
   }
 
   const routeChange = () => {

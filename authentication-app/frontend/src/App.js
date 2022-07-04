@@ -46,6 +46,7 @@ function App() {
                 path="signup"
                 element={
                   <Signup
+                    setLoading={setLoading}
                     isSignup={true}
                     setIsAuth={setIsAuth}
                     setUser={setUser}
@@ -56,6 +57,7 @@ function App() {
                 path="login"
                 element={
                   <Signup
+                    setLoading={setLoading}
                     isSignup={false}
                     setIsAuth={setIsAuth}
                     setUser={setUser}
@@ -67,6 +69,7 @@ function App() {
             <Route
               element={
                 <ProtectedRoute
+                  setLoading={setLoading}
                   isAuth={isAuth}
                   setIsAuth={setIsAuth}
                   setUser={setUser}
@@ -88,6 +91,7 @@ function App() {
                   path="edit-info"
                   element={
                     <EditInfo
+                      setLoading={setLoading}
                       userInfo={userInfo}
                       updateUserInfo={updateUserInfo}
                       fetchLatestUserInfo={fetchLatestUserInfo}

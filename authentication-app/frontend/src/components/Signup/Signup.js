@@ -14,6 +14,7 @@ import { NewService } from "../../service/service";
 
 
 function Signup({
+  setLoading,
   isSignup, 
   setIsAuth, 
   setUser,
@@ -37,19 +38,22 @@ function Signup({
   const onSubmit = () => {
     let s = NewService()
     const url = "/";
-
+    setLoading(true)
+    
     if (isSignup) {
       s.DefaultSignup(username, password)
       .then(function(resp) {
         setUser(resp);
         setIsAuth(true);
-        
+
         window.history.pushState({}, null, url);
         window.location.reload(true);
       })
       .catch(function(err) { 
         console.log(err)
         setErrorAlert(err);
+      }).finally(function() {
+        setLoading(false)
       })
     } else {
       s.DefaultLogin(username, password)
@@ -63,10 +67,12 @@ function Signup({
         .catch(function (err) {
           console.log(err)
           setErrorAlert(err)
+        }).finally(function() {
+          setLoading(false)
         });
     }
 
-    clearFields()
+    clearFields();
   }
 
   const clearFields = () => {
